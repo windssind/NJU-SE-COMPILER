@@ -51,6 +51,6 @@ public class Main
                 text = String.valueOf(Integer.parseInt(text,8));
             }
         }
-        System.out.println(String.format("%s %s at Line %d.",tokenName,text,t.getLine()));
+        System.err.println(String.format("%s %s at Line %d.",tokenName,text,t.getLine()));
     }
 }
