@@ -1,4 +1,4 @@
-lexer grammar SysY;
+lexer grammar SysYLexer;
 
 
 CONST : 'const';
