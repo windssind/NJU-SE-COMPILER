@@ -13,7 +13,7 @@ public class MyErrorListener extends BaseErrorListener {
 
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
-        errorMsg.add(String.format("Error type A at Line [%d]:[errorMessage]", line));
+        errorMsg.add(String.format("Error type A at Line %d:[errorMessage]", line));
         hasError  = true;
     }
     public  void printLexerErrorInformation(){
