@@ -1,9 +1,2 @@
-int main()
-{
-   // line comment
-   /*
-     block comment
-   */
-   int i = 0x1;
-}
+2i
 
