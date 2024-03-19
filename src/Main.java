@@ -42,7 +42,7 @@ public class Main
     }
 
     private  static void printSysYTokenInformation(Token t){
-        String tokenName = sysYLexer.getRuleNames()[t.getType()];
+        String tokenName = sysYLexer.VOCABULARY.getSymbolicName(t.getType());
         String text = t.getText();
         if (tokenName.equals("INTEGER_CONST")){
             if (text.startsWith("0x") || text.startsWith("0X")){
