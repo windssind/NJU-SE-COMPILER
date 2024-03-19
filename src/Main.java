@@ -14,7 +14,7 @@ import java.util.List;
 
 public class Main
 {
-    private  static SysYLexer sysYLexer ;
+    /*private  static SysYLexer sysYLexer ;
     public static void main(String[] args) throws IOException {
         if (args.length < 1) {
             System.err.println("input path is required");
@@ -52,5 +52,5 @@ public class Main
             }
         }
         System.out.println(String.format("%s %s at Line %d.",tokenName,text,t.getLine()));
-    }
+    }*/
 }
