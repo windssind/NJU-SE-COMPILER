@@ -14,7 +14,7 @@ public class MyParserErrorListener extends BaseErrorListener {
         errorMsg.add(String.format("Error type B at Line %d:[errorMessage]", line));
         hasError  = true;
     }
-    public  void printLexerErrorInformation(){
+    public  void printParserErrorInfomation(){
         for (String msg: errorMsg){
             System.err.println(msg);
         }
