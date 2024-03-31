@@ -1,15 +1,10 @@
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 
-import javax.print.DocFlavor;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 public class Main
@@ -22,22 +17,38 @@ public class Main
         String source = args[0];
         CharStream input = CharStreams.fromFileName(source);
         sysYLexer = new SysYLexer(input);
-        MyErrorListener myErrorListener = new MyErrorListener();
+        MyLexerErrorListener myLexerErrorListener = new MyLexerErrorListener();
         sysYLexer.removeErrorListeners();
-        sysYLexer.addErrorListener(myErrorListener);
+        sysYLexer.addErrorListener(myLexerErrorListener);
 
         // 获得所有的Token
         List<? extends Token> myTokens = sysYLexer.getAllTokens();
 
 
-        if (myErrorListener.hasError) {
+        if (myLexerErrorListener.hasError) {
             // 假设myErrorListener有一个错误信息输出函数printLexerErrorInformation.
-            myErrorListener.printLexerErrorInformation();
+            myLexerErrorListener.printLexerErrorInformation();
+            return;
         } else {
             for (Token t : myTokens) {
                 printSysYTokenInformation(t);
             }
         }
+
+        // Parser部分
+        CommonTokenStream tokenStream = new CommonTokenStream(sysYLexer);
+        SysYParser sysYParser = new SysYParser(tokenStream);
+        MyParserErrorListener myParserErrorListener = new MyParserErrorListener();
+        // 添加错误处理器
+        sysYParser.addErrorListener(myParserErrorListener);
+
+        if (myParserErrorListener.hasError) {
+            // 假设myErrorListener有一个错误信息输出函数printLexerErrorInformation.
+            myParserErrorListener.printLexerErrorInformation();
+            return;// 直接返回
+        }
+
+
 
     }
 
@@ -53,4 +64,7 @@ public class Main
         }
         System.err.println(String.format("%s %s at Line %d.",tokenName,text,t.getLine()));
     }
+
+
+
 }
