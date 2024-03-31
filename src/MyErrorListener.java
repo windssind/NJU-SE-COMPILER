@@ -5,7 +5,7 @@ import org.antlr.v4.runtime.Token;
 
 import java.util.ArrayList;
 
-public class MyErrorListener extends BaseErrorListener {
+public class MyLexerErrorListener extends BaseErrorListener {
 
     boolean hasError = false;
     // 存储所有的错误信息
