@@ -3,6 +3,7 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.io.IOException;
 import java.util.List;
@@ -42,7 +43,9 @@ public class Main
         // 添加错误处理器
         sysYParser.addErrorListener(myParserErrorListener);
 
-        //sysYParser.
+        // 获取编译的树
+        ParseTree  tree = sysYParser.exp();
+
         if (myParserErrorListener.hasError) {
             System.out.println("hasError");
             // 假设myErrorListener有一个错误信息输出函数printLexerErrorInformation.
