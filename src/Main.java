@@ -47,7 +47,6 @@ public class Main
         ParseTree  tree = sysYParser.exp();
 
         if (myParserErrorListener.hasError) {
-            System.out.println("hasError");
             // 假设myErrorListener有一个错误信息输出函数printLexerErrorInformation.
             myParserErrorListener.printParserErrorInfomation();
             return;// 直接返回
