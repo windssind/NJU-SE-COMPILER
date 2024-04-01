@@ -41,6 +41,8 @@ public class Main
         SysYParser sysYParser = new SysYParser(tokenStream);
         MyParserErrorListener myParserErrorListener = new MyParserErrorListener();
         // 添加错误处理器
+        // 需要事先移除默认的Listener，不然会输出不需要的
+        sysYParser.removeErrorListeners();
         sysYParser.addErrorListener(myParserErrorListener);
 
         // 获取编译的树
