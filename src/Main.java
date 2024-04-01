@@ -42,7 +42,7 @@ public class Main
         // 添加错误处理器
         sysYParser.addErrorListener(myParserErrorListener);
 
-        sysYParser.
+        //sysYParser.
         if (myParserErrorListener.hasError) {
             System.out.println("hasError");
             // 假设myErrorListener有一个错误信息输出函数printLexerErrorInformation.
