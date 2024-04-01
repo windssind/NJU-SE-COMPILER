@@ -22,19 +22,6 @@ public class Main
         sysYLexer.removeErrorListeners();
         sysYLexer.addErrorListener(myLexerErrorListener);
 
-        // 获得所有的Token
-        List<? extends Token> myTokens = sysYLexer.getAllTokens();
-
-
-        if (myLexerErrorListener.hasError) {
-            // 假设myErrorListener有一个错误信息输出函数printLexerErrorInformation.
-            myLexerErrorListener.printLexerErrorInformation();
-            return;
-        } else {
-            for (Token t : myTokens) {
-                printSysYTokenInformation(t);
-            }
-        }
 
         // Parser部分
         CommonTokenStream tokenStream = new CommonTokenStream(sysYLexer);
@@ -47,6 +34,21 @@ public class Main
 
         // 获取编译的树
         ParseTree  tree = sysYParser.exp();
+
+        // 获得所有的Token
+        List<? extends Token> myTokens = sysYLexer.getAllTokens();
+
+        // 检查Lexer是否有问题
+        if (myLexerErrorListener.hasError) {
+            // 假设myErrorListener有一个错误信息输出函数printLexerErrorInformation.
+            myLexerErrorListener.printLexerErrorInformation();
+            return;
+        } else {
+            for (Token t : myTokens) {
+                printSysYTokenInformation(t);
+            }
+        }
+
 
         if (myParserErrorListener.hasError) {
             // 假设myErrorListener有一个错误信息输出函数printLexerErrorInformation.
