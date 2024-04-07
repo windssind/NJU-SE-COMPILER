@@ -33,7 +33,7 @@ public class Main
         sysYParser.addErrorListener(myParserErrorListener);
 
         // 获取编译的树
-        ParseTree  tree = sysYParser.exp();
+        ParseTree  tree = sysYParser.program();
 
         // 获得所有的Token
         List<? extends Token> myTokens = sysYLexer.getAllTokens();
