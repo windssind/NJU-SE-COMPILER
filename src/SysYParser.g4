@@ -41,7 +41,7 @@ varDecl
 varDef
     :
     IDENT ( L_BRACKT constExp R_BRACKT )*
-    | IDENT ( L_BRACKT constExp R_BRACKT ) ASSIGN initVal
+    | IDENT ( L_BRACKT constExp R_BRACKT )* ASSIGN initVal
     ;
 
 initVal

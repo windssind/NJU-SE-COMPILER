@@ -50,11 +50,9 @@ public class Main
             myParserErrorListener.printParserErrorInfomation();
             return;// 直接返回
         }
-        /*
-        // 遍历语法树
-        SysYParserBaseVisitor visitor = new SysYParserBaseVisitor();
+        //遍历语法树
+        MyParserVisitor visitor = new MyParserVisitor();
         visitor.visit(tree);
-*/
 
     }
 
