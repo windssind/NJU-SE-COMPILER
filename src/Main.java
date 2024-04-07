@@ -43,20 +43,18 @@ public class Main
             // 假设myErrorListener有一个错误信息输出函数printLexerErrorInformation.
             myLexerErrorListener.printLexerErrorInformation();
             return;
-        } else {
-            for (Token t : myTokens) {
-                printSysYTokenInformation(t);
-            }
         }
-
 
         if (myParserErrorListener.hasError) {
             // 假设myErrorListener有一个错误信息输出函数printLexerErrorInformation.
             myParserErrorListener.printParserErrorInfomation();
             return;// 直接返回
         }
-
-
+        /*
+        // 遍历语法树
+        SysYParserBaseVisitor visitor = new SysYParserBaseVisitor();
+        visitor.visit(tree);
+*/
 
     }
 
