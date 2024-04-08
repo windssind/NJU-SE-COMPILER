@@ -34,12 +34,6 @@ public interface SysYParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitConstDecl(SysYParser.ConstDeclContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SysYParser#bType}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBType(SysYParser.BTypeContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link SysYParser#constDef}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -159,4 +153,10 @@ public interface SysYParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitConstExp(SysYParser.ConstExpContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SysYParser#funcName}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFuncName(SysYParser.FuncNameContext ctx);
 }

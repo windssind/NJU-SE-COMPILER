@@ -1,31 +1,5 @@
-int main() {
-    int arr[100];  // 假设数组长度为 100
-    int n;         // 数组元素个数
-
-    // 输入数组长度和元素
-    read(n);
-    for (int i = 0; i < n; i++) {
-        read(arr[i]);
-    }
-
-    // 冒泡排序
-    for (int i = 0; i < n - 1; i++) {
-        for (int j = 0; j < n - i - 1; j++) {
-            if (arr[j] > arr[j + 1]) {
-                // 交换 arr[j] 和 arr[j + 1]
-                int temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
-            }
-        }
-    }
-
-    // 输出排序后的数组
-    for (int i = 0; i < n; i++) {
-        write(arr[i]);
-        write(" ");
-    }
-    write('\n');
-
-    return 0;
+int foo(int a,int b,int c,int     d){
+a = foo(a);
+    if(a == foo(b))
+        return a;
 }

@@ -47,16 +47,6 @@ public interface SysYParserListener extends ParseTreeListener {
 	 */
 	void exitConstDecl(SysYParser.ConstDeclContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SysYParser#bType}.
-	 * @param ctx the parse tree
-	 */
-	void enterBType(SysYParser.BTypeContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SysYParser#bType}.
-	 * @param ctx the parse tree
-	 */
-	void exitBType(SysYParser.BTypeContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link SysYParser#constDef}.
 	 * @param ctx the parse tree
 	 */
@@ -256,4 +246,14 @@ public interface SysYParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitConstExp(SysYParser.ConstExpContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SysYParser#funcName}.
+	 * @param ctx the parse tree
+	 */
+	void enterFuncName(SysYParser.FuncNameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SysYParser#funcName}.
+	 * @param ctx the parse tree
+	 */
+	void exitFuncName(SysYParser.FuncNameContext ctx);
 }

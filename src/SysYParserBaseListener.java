@@ -63,18 +63,6 @@ public class SysYParserBaseListener implements SysYParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBType(SysYParser.BTypeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBType(SysYParser.BTypeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterConstDef(SysYParser.ConstDefContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -310,6 +298,18 @@ public class SysYParserBaseListener implements SysYParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitConstExp(SysYParser.ConstExpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFuncName(SysYParser.FuncNameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFuncName(SysYParser.FuncNameContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
