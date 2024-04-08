@@ -1,7 +1,8 @@
 int main(){
-    foo();
-    break;
-}
-int foo(){
-    int a = 5;
+    if (a == b){
+
+    }else{
+
+    }
+    return     ;
 }

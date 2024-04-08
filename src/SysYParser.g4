@@ -46,7 +46,7 @@ varDef
 
 initVal
     :
-    exp | L_BRACE ( initVal ( COMMA initVal ) * )? R_BRACE
+    exp | L_BRACE ( initVal ( COMMA initVal )* )? R_BRACE
     ;
 funcDef
     : funcType IDENT L_PAREN (funcFParams)? R_PAREN block
@@ -73,14 +73,14 @@ blockItem
     | stmt
     ;
 stmt
-    : lVal ASSIGN exp SEMICOLON
-    | (exp)? SEMICOLON
-    | block
-    | IF L_PAREN cond R_PAREN stmt ( ELSE stmt )
-    | WHILE L_PAREN cond R_PAREN stmt
-    | BREAK SEMICOLON
-    | CONTINUE SEMICOLON
-    | RETURN (exp) SEMICOLON
+    : lVal ASSIGN exp SEMICOLON //  赋值语句
+    | (exp)? SEMICOLON //  空语句，如单独的a;
+    | block // {}这样所形成的代码块,stmt(语句)可以是一堆代码块
+    | IF L_PAREN cond R_PAREN stmt ( ELSE stmt ) // if语句
+    | WHILE L_PAREN cond R_PAREN stmt // while语句
+    | BREAK SEMICOLON // break语句
+    | CONTINUE SEMICOLON // continue语句
+    | RETURN  SEMICOLON // return语句
     ;
 
 
