@@ -80,7 +80,7 @@ stmt
     | WHILE L_PAREN cond R_PAREN stmt // while语句
     | BREAK SEMICOLON // break语句
     | CONTINUE SEMICOLON // continue语句
-    | RETURN  SEMICOLON // return语句
+    | RETURN (exp)? SEMICOLON // return语句
     ;
 
 
