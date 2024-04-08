@@ -14,6 +14,7 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
 
     private int indentation = 0;
     private boolean isInDecl = false;
+    private boolean hasASpace = false;
 
     private SGR_Name[] colorTable = {SGR_Name.LightRed, SGR_Name.LightGreen, SGR_Name.LightYellow, SGR_Name.LightBlue, SGR_Name.LightMagenta, SGR_Name.LightCyan};
     private int colorIndex = 0;
@@ -44,14 +45,13 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
                 }
                 PrintTerminalNode(SGR_Name.LightCyan, node.getText(), isInDecl);
                 if ((!isCONTINUEBREAKRETURN(node) || (isRETURN(node) && !isRETURNNeighborsSEMICOLON(node)))) {
-                    System.out.print(" ");
+                    if (!hasASpace){
+                        System.out.print(" ");
+                        hasASpace = true;
+                    }
                 }
                 if (isIFELSEWHILE(node)) {
                     indentation += 1;
-                }
-                // else之后并不会有空格，如果followIf的话，要在前面补上一个空格
-                if (isIF(node) && isIFFollowsELSE(node)) {
-                    indentation -= 1;
                 }
                 break;
             case SysYLexer.PLUS:
@@ -72,11 +72,17 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
             case SysYLexer.SEMICOLON:
             case SysYLexer.COMMA:
                 if (isBinaryOp(node)) {
-                    System.out.print(" ");
+                    if (!hasASpace){
+                        System.out.print(" ");
+                        hasASpace = true;
+                    }
                 }
                 PrintTerminalNode(SGR_Name.LightRed, node.getText(), isInDecl);
                 if (isCOMMA(node) || isBinaryOp(node)) {
-                    System.out.print(" ");
+                    if (!hasASpace){
+                        System.out.print(" ");
+                        hasASpace = true;
+                    }
                 }
                 break;
             case SysYLexer.INTEGER_CONST:
@@ -95,7 +101,10 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
             case SysYLexer.L_BRACE:
                 // 如果是Block的子结点或者decl（{1,2,3,4}）的子结点这样，就不需要额外输出一个空格
                 if (!isSonOfASingleBlock(node) && !isSonOfDecl(node)) {
-                    System.out.print(" ");
+                    if (!hasASpace){
+                        System.out.print(" ");
+                        hasASpace = true;
+                    }
                 }
                 /* 如果{前面跟的是if或者else，那么就不需要输出一个空格*/
                 colorStack.push(colorTable[colorIndex]);
@@ -111,6 +120,7 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
                     colorIndex = (colorIndex + colorTable.length) % colorTable.length;
                 } else {
                     System.out.print("\n");
+                    hasASpace = false;
                     indentation -= 1;// 缩进暂时减去1,还要恢复,让控制整个block的缩进的逻辑放到visitBlock里面
                     PrintIndentation();
                     PrintTerminalNode(colorStack.pop(), node.getText(), isInDecl);
@@ -179,6 +189,7 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
         if (!isFuncDefInLine1(ctx.getRuleContext())) {
             System.out.println();
             System.out.println();
+            hasASpace = false;
         }
         super.visitFuncDef(ctx);
         return null;
@@ -218,6 +229,7 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
     private void PrintIndentation() {
         for (int i = 0; i < indentation; ++i) {
             System.out.print("    ");
+            hasASpace = false;
         }
     }
 
@@ -373,5 +385,6 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
         } else {
             System.out.print("\033[" + color.getValue() + "m" + text + "\033[0m");
         }
+        hasASpace = false;
     }
 }

@@ -1,4 +1,9 @@
 int main(){
-    int a[];
-    return a][;
+    int a= b;
+    c = d;
+    if(a == c){
+        print(b);
+    }else{
+
+    }
 }
