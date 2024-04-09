@@ -2,4 +2,11 @@ int foo(int a,int b,int c,int     d){
 a = foo(a);
     if(a == foo(b))
         return a;
+    else
+        return b;
+    {{{{}}}}
+}
+
+int main(){
+{{{{}}}}
 }

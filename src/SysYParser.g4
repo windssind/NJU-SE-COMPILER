@@ -202,9 +202,9 @@ blockItem
     ;
 
 stmt
-    : lVal ASSIGN exp SEMICOLON
-    | (exp)? SEMICOLON
-    | block
+    : lVal ASSIGN exp SEMICOLON // 换行
+    | (exp)? SEMICOLON // 换行
+    | block // 换行？不一定，如果这个block是嵌在下面两行的stmt里面的，就不需要换行。著有
     | IF L_PAREN cond R_PAREN stmt (ELSE stmt)?
     | WHILE L_PAREN cond R_PAREN stmt
     | BREAK SEMICOLON

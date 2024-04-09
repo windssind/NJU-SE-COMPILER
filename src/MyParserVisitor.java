@@ -50,9 +50,9 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
                         hasASpace = true;
                     }
                 }
-                if (isIFELSEWHILE(node)) {
+                /*if (isIFELSEWHILE(node)) {
                     indentation += 1;
-                }
+                }*/
                 break;
             case SysYLexer.PLUS:
             case SysYLexer.MINUS:
@@ -162,11 +162,13 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
 
     @Override
     public Void visitStmt(SysYParser.StmtContext ctx) {
-        // 如果是IFELSEWHILE的话，就不需要输出空行
-        if (!isIFELSEWHILEStmt(ctx.getRuleContext())) {
+        // 如果这个语句是if或者else或者while后面接的stmt并且这个是一个block，那么就不需要输出一个空行
+        // 对！这个逻辑就顺畅了 基本确定是正确的，不要再改动了
+        if (!isIFELSEWHILEStmtAndIsABlock(ctx)) {
             System.out.println();
             PrintIndentation();
         }
+        // TODO:如果是if后面只带了一个单行的stmt，就indentation+1
         super.visitStmt(ctx);
         return null;
     }
@@ -175,9 +177,9 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
     public Void visitBlock(SysYParser.BlockContext ctx) {
         // 如果是单独的block或者函数里面的block，就让indentation+1,if else等控制的block让if else给indention增加
         // 错误的，单独的block不需要indentation +1
-        if (isASingleBlock(ctx.getRuleContext()) || isBlockInFuncDef(ctx)) {
-            indentation += 1;
-        }
+       indentation += 1;
+        // 如果是单独的块，就输出一个空行
+        // 在执行visitBlock之前已经执行了visitStmt，所以已经换行了
         super.visitBlock(ctx);
         indentation -= 1;
         return null;
@@ -257,9 +259,8 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
         return false;
     }
 
-    private boolean isIFELSEWHILE(TerminalNode node) {
-        return (node.getSymbol().getType() == SysYLexer.IF || node.getSymbol().getType() == SysYLexer.ELSE || node.getSymbol().getType() == SysYLexer.WHILE);
-    }
+    // 该函数用于判断stmt是否需要输出一个空行
+    // 如果是IFELSEWHILE里面的stmt并且自己的孩子结点是一个block，那么就不需要换行
     /*
 
     IF L_PAREN cond R_PAREN stmt ( ELSE stmt ) // if语句
@@ -267,23 +268,44 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
     // 如果是if语句或者while语句,stmt就不需要输出一个空行
      */
 
+    // 但是要注意,if (cond) stmt这样的语句也需要输出一个空行，不要误伤
     //判断我这个stmt是否是if语句或者while语句
-    private boolean isIFELSEWHILEStmt(ParseTree node) {
+
+    //TODO: 整理一下这个的思路，逻辑有点混乱了
+    // 如果是if 里面的stmt或者是while里面的stmt，就不需要输出一个空行
+    // if 和 while里面的stmt只要不是block，
+    // 如果是 if (cond) stmt(不是block的stmt) while(cond)stmt，就输出真
+    private boolean isIFELSEWHILEStmtAndIsABlock(ParseTree node) {
         ParseTree parentNode = node.getParent();
         if (!(parentNode instanceof RuleNode)) {
             System.err.println("wrong");
             System.exit(0);
         }
 
-        ParseTree child1 = parentNode.getChild(0);
-        if (!(child1 instanceof TerminalNode)) {
+        ParseTree brother1 = parentNode.getChild(0);
+        if (!(brother1 instanceof TerminalNode)) {
             return false;
         }
-        String child1Text = ((TerminalNode) child1).getText();
-        if (child1Text.compareTo("if") == 0 || child1Text.compareTo("while") == 0) {
-            return true;
+        boolean isIFELSEWHILE =  false;
+        boolean isStmtABlock = false;
+        if (((TerminalNode) brother1).getSymbol().getType() == SysYLexer.IF || ((TerminalNode) brother1).getSymbol().getType() == SysYLexer.WHILE) {
+            isIFELSEWHILE = true;
         }
-        return false;
+        if (parentNode.getChildCount() >= 5 ){
+            ParseTree brother5 = parentNode.getChild(5);
+            if (brother5 instanceof TerminalNode) {
+                if (((TerminalNode) brother5).getSymbol().getType() == SysYLexer.ELSE){
+                    isIFELSEWHILE = true;
+                }
+            }
+        }
+        ParseTree childNode = node.getChild(0);
+        if (childNode instanceof RuleNode) {
+            if (((RuleNode) childNode).getRuleContext().getRuleIndex() == SysYParser.RULE_block) {
+                isStmtABlock = true;
+            }
+        }
+        return isStmtABlock && isIFELSEWHILE;
     }
 
     // 判断是否是一个单独的代码块
@@ -386,5 +408,16 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
             System.out.print("\033[" + color.getValue() + "m" + text + "\033[0m");
         }
         hasASpace = false;
+    }
+
+    // 如果是一个if紧跟着在父亲的else后面的stmt，就返回true
+    // TODO： 重新整理一下，当stmt是block的时候不需要换行
+    // 判断这个stmt是否是一个单独的block
+    private boolean isStmtABlock(ParseTree node) {
+        ParseTree childNode = node.getChild(0);
+        if (!(childNode instanceof RuleNode)) {
+            return false;
+        }
+        return ((((RuleNode) childNode).getRuleContext().getRuleIndex() == SysYParser.RULE_block));
     }
 }
