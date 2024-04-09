@@ -217,6 +217,7 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
             hasASpace = false;
         }
         super.visitFuncDef(ctx);
+        isInLineOne = false;
         return null;
     }
 

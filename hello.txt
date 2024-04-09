@@ -1,1 +1,4 @@
-const int i = 5;
+
+int happy(){
+
+}const int i = 5;
