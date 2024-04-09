@@ -210,9 +210,10 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
         if (childNode == null) {
             System.err.println("Error");
         }
-        if (childNode instanceof TerminalNode) {
+        if (childNode instanceof RuleNode) {
+            childNode = (TerminalNode)childNode.getChild(0);
             return ((TerminalNode) childNode).getSymbol().getLine() == 1;
-        } else {
+        }else{
             return false;
         }
     }

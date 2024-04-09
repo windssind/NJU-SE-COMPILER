@@ -1,4 +1,12 @@
 int main(){
-if (a == b) return a;
-else return b;
+if (a == b){
+    {
+        int c = a +b;
+        int d = b - d;
+        if (a == c)
+            return a;
+         else return d;
+    }
+    }
+    {{{{{{{}}}}}}}
 }
