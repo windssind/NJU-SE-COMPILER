@@ -1,5 +1,7 @@
-
 int happy(){
-
-}const int i = 5;
+    const int unhappy = 5;
+}
 const int i = 4;
+int unhappy(){
+
+}

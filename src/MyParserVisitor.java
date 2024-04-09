@@ -45,6 +45,7 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
             case SysYLexer.VOID:
                 if (isELSE(node)) {
                     System.out.print("\n");
+                    isInLineOne = false;
                     PrintIndentation();
                 }
                 PrintTerminalNode(SGR_Name.LightCyan, node.getText(), isInDecl);
@@ -129,6 +130,7 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
                     colorIndex = (colorIndex + colorTable.length) % colorTable.length;
                 } else {
                     System.out.print("\n");
+                    isInLineOne = false;
                     hasASpace = false;
                     indentation -= 1;// 缩进暂时减去1,还要恢复,让控制整个block的缩进的逻辑放到visitBlock里面
                     PrintIndentation();
@@ -167,7 +169,6 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
         isInDecl = true;
         super.visitDecl(ctx);
         isInDecl = false;
-        isInLineOne = false;
         return null;
     }
 
@@ -181,6 +182,7 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
         }
         if (!isIFELSEWHILEStmtAndIsABlock(ctx) && !isInLineOne) {
             System.out.println();
+            isInLineOne = false;
             PrintIndentation();
         }
         // TODO:如果是if后面只带了一个单行的stmt，就indentation+1
@@ -214,10 +216,12 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
         if (!isInLineOne) {
             System.out.println();
             System.out.println();
+            isInLineOne = false;
             hasASpace = false;
         }
-        super.visitFuncDef(ctx);
         isInLineOne = false;
+        super.visitFuncDef(ctx);
+
         return null;
     }
 
