@@ -249,14 +249,14 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
         }
     }
 
-    // 判断是否是一个单独的代码块的子结点
+    // 判断{是否是一个单独的代码块的子结点
     private boolean isSonOfASingleBlock(ParseTree node) {
         ParseTree parentNode = node.getParent();
         if (!(parentNode instanceof RuleNode)) {
             System.err.println("wrong");
             System.exit(0);
         }
-
+        /*
         for (int i = 0; i < 10; ++i) {
             if (((RuleNode) parentNode).getRuleContext().getRuleIndex() == SysYParser.RULE_block) {
                 parentNode = parentNode.getParent();
@@ -269,6 +269,15 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
             }
             parentNode = parentNode.getParent();
             if (parentNode == null) return false;
+        }*/
+        if (((RuleNode) parentNode).getRuleContext().getRuleIndex() == SysYParser.RULE_block) {
+            parentNode = parentNode.getParent();
+            if (((RuleNode) parentNode).getRuleContext().getRuleIndex() == SysYParser.RULE_stmt) {
+                parentNode = parentNode.getParent(); // 走到stmt的stmt环节
+                return parentNode.getChildCount() == 1;
+            } else {
+                return false;
+            }
         }
         return false;
     }
