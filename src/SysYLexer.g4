@@ -64,7 +64,7 @@ R_BRACKT : ']';
 COMMA : ',';
 
 
-ICOLON : ';';
+SEMICOLON : ';';
 
 IDENT : (LETTER) ( LETTER | DIGIT)*
    ;
