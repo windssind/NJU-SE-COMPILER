@@ -91,7 +91,7 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
             case SysYLexer.IDENT:
                 // 这个是函数定义
                 int parentNodeIndex = ((RuleNode) parentNode).getRuleContext().getRuleIndex();
-                boolean isFunc = !(parentNodeIndex == SysYParser.RULE_lVal || parentNodeIndex == SysYParser.RULE_constDef || parentNodeIndex == SysYParser.RULE_varDef);
+                boolean isFunc = !(parentNodeIndex == SysYParser.RULE_lVal || parentNodeIndex == SysYParser.RULE_constDef || parentNodeIndex == SysYParser.RULE_varDef || parentNodeIndex == SysYParser.RULE_funcFParam);
                 if (isFunc) {
                     PrintTerminalNode(SGR_Name.LightYellow, node.getText(), isInDecl);
                 } else {
