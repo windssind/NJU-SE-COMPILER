@@ -483,12 +483,13 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
     }
 
 
+    // 如果这个stmt结点是一个单独的block，就返回false
     private boolean InStmtNotBlock(ParseTree node){
         ParseTree childNode = node.getChild(0);
         if (childNode instanceof RuleNode) {
-            return  (((RuleNode) childNode).getRuleContext().getRuleIndex() == SysYParser.RULE_block);
+            return  !(((RuleNode) childNode).getRuleContext().getRuleIndex() == SysYParser.RULE_block);
         }else{
-            return false;
+            return true;
         }
     }
 }
