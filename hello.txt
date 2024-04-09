@@ -16,6 +16,7 @@ const int b =7;
                 a = d;
         }
     }
+    return a== n;
 }
 
 void UNhappy(){
