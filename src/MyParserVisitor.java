@@ -45,7 +45,7 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
                 }
                 PrintTerminalNode(SGR_Name.LightCyan, node.getText(), isInDecl);
                 if ((!isCONTINUEBREAKRETURN(node) || (isRETURN(node) && !isRETURNNeighborsSEMICOLON(node)))) {
-                    if (!hasASpace){
+                    if (!hasASpace) {
                         System.out.print(" ");
                         hasASpace = true;
                     }
@@ -72,14 +72,14 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
             case SysYLexer.SEMICOLON:
             case SysYLexer.COMMA:
                 if (isBinaryOp(node)) {
-                    if (!hasASpace){
+                    if (!hasASpace) {
                         System.out.print(" ");
                         hasASpace = true;
                     }
                 }
                 PrintTerminalNode(SGR_Name.LightRed, node.getText(), isInDecl);
                 if (isCOMMA(node) || isBinaryOp(node)) {
-                    if (!hasASpace){
+                    if (!hasASpace) {
                         System.out.print(" ");
                         hasASpace = true;
                     }
@@ -101,7 +101,7 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
             case SysYLexer.L_BRACE:
                 // 如果是Block的子结点或者decl（{1,2,3,4}）的子结点这样，就不需要额外输出一个空格
                 if (!isSonOfASingleBlock(node) && !isSonOfDecl(node)) {
-                    if (!hasASpace){
+                    if (!hasASpace) {
                         System.out.print(" ");
                         hasASpace = true;
                     }
@@ -164,12 +164,18 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
     public Void visitStmt(SysYParser.StmtContext ctx) {
         // 如果这个语句是if或者else或者while后面接的stmt并且这个是一个block，那么就不需要输出一个空行
         // 对！这个逻辑就顺畅了 基本确定是正确的，不要再改动了
+        if (isStmtSingleINWhileIfElseAndNotABlock(ctx)){
+            indentation += 1;
+        }
         if (!isIFELSEWHILEStmtAndIsABlock(ctx)) {
             System.out.println();
             PrintIndentation();
         }
         // TODO:如果是if后面只带了一个单行的stmt，就indentation+1
         super.visitStmt(ctx);
+        if (isStmtSingleINWhileIfElseAndNotABlock(ctx)){
+            indentation -=1;
+        }
         return null;
     }
 
@@ -177,7 +183,7 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
     public Void visitBlock(SysYParser.BlockContext ctx) {
         // 如果是单独的block或者函数里面的block，就让indentation+1,if else等控制的block让if else给indention增加
         // 错误的，单独的block不需要indentation +1
-       indentation += 1;
+        indentation += 1;
         // 如果是单独的块，就输出一个空行
         // 在执行visitBlock之前已经执行了visitStmt，所以已经换行了
         super.visitBlock(ctx);
@@ -286,15 +292,15 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
         if (!(brother1 instanceof TerminalNode)) {
             return false;
         }
-        boolean isIFELSEWHILE =  false;
+        boolean isIFELSEWHILE = false;
         boolean isStmtABlock = false;
         if (((TerminalNode) brother1).getSymbol().getType() == SysYLexer.IF || ((TerminalNode) brother1).getSymbol().getType() == SysYLexer.WHILE) {
             isIFELSEWHILE = true;
         }
-        if (parentNode.getChildCount() >= 5 ){
+        if (parentNode.getChildCount() >= 5) {
             ParseTree brother5 = parentNode.getChild(5);
             if (brother5 instanceof TerminalNode) {
-                if (((TerminalNode) brother5).getSymbol().getType() == SysYLexer.ELSE){
+                if (((TerminalNode) brother5).getSymbol().getType() == SysYLexer.ELSE) {
                     isIFELSEWHILE = true;
                 }
             }
@@ -419,5 +425,39 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
             return false;
         }
         return ((((RuleNode) childNode).getRuleContext().getRuleIndex() == SysYParser.RULE_block));
+    }
+
+    // 如果是单独的一条语句跟在While If else后面并且不是block，就返回true
+    private boolean isStmtSingleINWhileIfElseAndNotABlock(ParseTree node){
+        ParseTree parentNode = node.getParent();
+        if (!(parentNode instanceof RuleNode)) {
+            System.err.println("wrong");
+            System.exit(0);
+        }
+
+        ParseTree brother1 = parentNode.getChild(0);
+        if (!(brother1 instanceof TerminalNode)) {
+            return false;
+        }
+        boolean isIFELSEWHILE = false;
+        boolean isStmtABlock = false;
+        if (((TerminalNode) brother1).getSymbol().getType() == SysYLexer.IF || ((TerminalNode) brother1).getSymbol().getType() == SysYLexer.WHILE) {
+            isIFELSEWHILE = true;
+        }
+        if (parentNode.getChildCount() >= 5) {
+            ParseTree brother5 = parentNode.getChild(5);
+            if (brother5 instanceof TerminalNode) {
+                if (((TerminalNode) brother5).getSymbol().getType() == SysYLexer.ELSE) {
+                    isIFELSEWHILE = true;
+                }
+            }
+        }
+        ParseTree childNode = node.getChild(0);
+        if (childNode instanceof RuleNode) {
+            if (((RuleNode) childNode).getRuleContext().getRuleIndex() == SysYParser.RULE_block) {
+                isStmtABlock = true;
+            }
+        }
+        return !isStmtABlock && isIFELSEWHILE;
     }
 }
