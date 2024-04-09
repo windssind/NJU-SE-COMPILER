@@ -211,7 +211,7 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
     @Override
     public Void visitFuncDef(SysYParser.FuncDefContext ctx) {
         // 如果是函数定义不在第一行,就输出一个空行
-        if (!isFuncDefInLine1(ctx.getRuleContext())) {
+        if (!isInLineOne) {
             System.out.println();
             System.out.println();
             hasASpace = false;
