@@ -14,6 +14,8 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
 
     private int indentation = 0;
     private boolean isInDecl = false;
+
+    private boolean isInStmtNotBlock = false;
     private boolean hasASpace = false;
 
     private SGR_Name[] colorTable = {SGR_Name.LightRed, SGR_Name.LightGreen, SGR_Name.LightYellow, SGR_Name.LightBlue, SGR_Name.LightMagenta, SGR_Name.LightCyan};
@@ -92,7 +94,15 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
                 if (isFunc) {
                     PrintTerminalNode(SGR_Name.LightYellow, node.getText(), isInDecl);
                 } else {
-                    PrintTerminalNode(isInDecl ? SGR_Name.LightMagenta : SGR_Name.White, node.getText(), isInDecl);
+                    SGR_Name color ;
+                    if (isInDecl) {
+                        color = SGR_Name.LightMagenta;
+                    } else if(isInStmtNotBlock){
+                        color = SGR_Name.White;
+                    }else{
+                        color = null;
+                    }
+                    PrintTerminalNode(color, node.getText(), isInDecl);
                 }
                 break;
             case SysYLexer.L_BRACE:
@@ -169,10 +179,14 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
             PrintIndentation();
         }
         // TODO:如果是if后面只带了一个单行的stmt，就indentation+1
+        if (InStmtNotBlock(ctx)){
+            isInStmtNotBlock = true;
+        }
         super.visitStmt(ctx);
         if (isStmtSingleINWhileIfElseAndNotABlock(ctx)) {
             indentation -= 1;
         }
+        isInStmtNotBlock = false;
         return null;
     }
 
@@ -411,6 +425,10 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
 
 
     private void PrintTerminalNode(SGR_Name color, String text, boolean isUnderScore) {
+        if (color == null){
+            System.out.print(text);
+            return;
+        }
         if (isUnderScore) {
             System.out.print("\033[" + color.getValue() + ";" + "4m" + text + "\033[0m");
         } else {
@@ -462,5 +480,15 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
             }
         }
         return !isStmtABlock && isIFELSEWHILE;
+    }
+
+
+    private boolean InStmtNotBlock(ParseTree node){
+        ParseTree childNode = node.getChild(0);
+        if (childNode instanceof RuleNode) {
+            return  (((RuleNode) childNode).getRuleContext().getRuleIndex() == SysYParser.RULE_block);
+        }else{
+            return false;
+        }
     }
 }
