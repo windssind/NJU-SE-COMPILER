@@ -169,6 +169,7 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
         isInDecl = true;
         super.visitDecl(ctx);
         isInDecl = false;
+        isInLineOne = false;
         return null;
     }
 
