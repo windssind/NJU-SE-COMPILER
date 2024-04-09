@@ -18,6 +18,8 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
     private boolean isInStmtNotBlock = false;
     private boolean hasASpace = false;
 
+    private boolean isInLineOne = true;
+
     private SGR_Name[] colorTable = {SGR_Name.LightRed, SGR_Name.LightGreen, SGR_Name.LightYellow, SGR_Name.LightBlue, SGR_Name.LightMagenta, SGR_Name.LightCyan};
     private int colorIndex = 0;
 
@@ -158,11 +160,14 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
     // 直接输出一个空行就行了
     @Override
     public Void visitDecl(SysYParser.DeclContext ctx) {
-        System.out.println();
-        PrintIndentation();
+        if (!isInLineOne){
+            System.out.println();
+            PrintIndentation();
+        }
         isInDecl = true;
         super.visitDecl(ctx);
         isInDecl = false;
+        isInLineOne = false;
         return null;
     }
 
@@ -174,7 +179,7 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
         if (isStmtSingleINWhileIfElseAndNotABlock(ctx)) {
             indentation += 1;
         }
-        if (!isIFELSEWHILEStmtAndIsABlock(ctx)) {
+        if (!isIFELSEWHILEStmtAndIsABlock(ctx) && !isInLineOne) {
             System.out.println();
             PrintIndentation();
         }
@@ -187,6 +192,7 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
             indentation -= 1;
         }
         isInStmtNotBlock = false;
+        isInLineOne = false;
         return null;
     }
 

@@ -1,5 +1,1 @@
-int main(int n){
-    if (a == b ){
-    return null;
-    }
-}
+const int i = 5;
