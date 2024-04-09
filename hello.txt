@@ -1,9 +1,7 @@
-const int happy = 5;
-int happy(){
-    const int unhappy = 5;
-}
-const int i = 4;
-const int b = 5;
-int unhappy(){
-int c = 8;
+int test(){
+    int a = 5;
+    if (a == b)
+        return a;
+    else
+        return b;
 }

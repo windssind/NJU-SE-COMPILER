@@ -51,8 +51,10 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
                 PrintTerminalNode(SGR_Name.LightCyan, node.getText(), isInDecl);
                 if ((!isCONTINUEBREAKRETURN(node) || (isRETURN(node) && !isRETURNNeighborsSEMICOLON(node)))) {
                     if (!hasASpace) {
-                        System.out.print(" ");
-                        hasASpace = true;
+                        if ((!isELSE(node)) ||(isELSE(node) && !isElseNeighborsStmtNotBlock(node))){
+                            System.out.print(" ");
+                            hasASpace = true;
+                        }
                     }
                 }
                 break;
@@ -227,20 +229,6 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
     }
 
 
-    // 判断是否是函数定义在第一行
-    private boolean isFuncDefInLine1(ParseTree node) {
-        ParseTree childNode = node.getChild(0);
-        if (childNode == null) {
-            System.err.println("Error");
-        }
-        if (childNode instanceof RuleNode) {
-            childNode = (TerminalNode) childNode.getChild(0);
-            return ((TerminalNode) childNode).getSymbol().getLine() == 1;
-        } else {
-            return false;
-        }
-    }
-
 
     // 用于判断左括号和右括号是否是decl 的子结点
     // 实际上直接判断父亲是否是初值就行了
@@ -251,16 +239,7 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
             System.exit(0);
         }
 
-        if (((RuleNode) parentNode).getRuleContext().getRuleIndex() == SysYParser.RULE_constInitVal || ((RuleNode) parentNode).getRuleContext().getRuleIndex() == SysYParser.RULE_initVal) {
-            /*parentNode = parentNode.getParent();
-            if (parentNode instanceof RuleNode) {
-                return ((RuleNode) parentNode).getRuleContext().getRuleIndex() == SysYParser.RULE_decl;
-            } else {
-                return false;
-            }*/
-            return true;
-        }
-        return false;
+        return (((RuleNode) parentNode).getRuleContext().getRuleIndex() == SysYParser.RULE_constInitVal || ((RuleNode) parentNode).getRuleContext().getRuleIndex() == SysYParser.RULE_initVal);
     }
 
     private void PrintIndentation() {
@@ -343,30 +322,6 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
         return isStmtABlock && isIFELSEWHILE;
     }
 
-    // 判断是否是一个单独的代码块
-    private boolean isASingleBlock(ParseTree node) {
-        ParseTree parentNode = node.getParent();
-        if (!(parentNode instanceof RuleNode)) {
-            System.err.print("wrong");
-            System.exit(0);
-        }
-        if (((RuleNode) parentNode).getRuleContext().getRuleIndex() == SysYParser.RULE_stmt) {
-            parentNode = parentNode.getParent(); // 这一步就已经到了stmt的stmt了
-            return parentNode.getChildCount() == 1; // 如果自身是在stmt里面，而且这个stmt是不依附于其他结点的、是一个独立的结点的话，那这个就是单独的block
-        } else {
-            return false;
-        }
-    }
-
-    private boolean isBlockInFuncDef(ParseTree node) {
-        ParseTree parentNode = node.getParent();
-        if (!(parentNode instanceof RuleNode)) {
-            System.err.print("wrong");
-            System.exit(0);
-        }
-        return (((RuleNode) parentNode).getRuleContext().getRuleIndex() == SysYParser.RULE_funcDef);
-    }
-
     private boolean isCONTINUEBREAKRETURN(TerminalNode node) {
         return (node.getSymbol().getType() == SysYLexer.CONTINUE || node.getSymbol().getType() == SysYLexer.BREAK || node.getSymbol().getType() == SysYLexer.RETURN);
     }
@@ -397,35 +352,6 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
         return (((node.getSymbol().getType() == SysYLexer.PLUS || node.getSymbol().getType() == SysYLexer.MINUS) && ((RuleNode) node.getParent()).getChildCount() == 3) || node.getSymbol().getType() == SysYLexer.MUL || node.getSymbol().getType() == SysYLexer.DIV || node.getSymbol().getType() == SysYLexer.MOD || node.getSymbol().getType() == SysYLexer.AND || node.getSymbol().getType() == SysYLexer.OR || node.getSymbol().getType() == SysYLexer.EQ || node.getSymbol().getType() == SysYLexer.NEQ || node.getSymbol().getType() == SysYLexer.LE || node.getSymbol().getType() == SysYLexer.LT || node.getSymbol().getType() == SysYLexer.GE || node.getSymbol().getType() == SysYLexer.GT || node.getSymbol().getType() == SysYLexer.ASSIGN);
     }
 
-    private boolean isUnaryOp(TerminalNode node) {
-        ParseTree parentNode = node.getParent();
-        if (!(parentNode instanceof RuleNode)) {
-            System.err.print("wrong");
-            System.exit(0);
-        }
-        return ((RuleNode) parentNode).getRuleContext().getRuleIndex() == SysYParser.RULE_unaryOp;
-    }
-
-    // 判断这个IF是否跟在ELSE后面，else if减少一个IDENT
-    private boolean isIFFollowsELSE(TerminalNode node) {
-        ParseTree parentNode = node.getParent();
-        if (!(parentNode instanceof RuleNode)) {
-            System.err.print("wrong");
-            System.exit(0);
-        }
-        if (!(((RuleNode) parentNode).getRuleContext().getRuleIndex() == SysYParser.RULE_stmt)) {
-            return false;
-        }
-        TerminalNode childNode = ((TerminalNode) ((RuleNode) parentNode).getRuleContext().getChild(parentNode.getChildCount() - 2));
-        if (!(childNode instanceof TerminalNode)) {
-            return false;
-        }
-        return childNode.getSymbol().getType() == SysYLexer.ELSE;
-    }
-
-    private boolean isIF(TerminalNode node) {
-        return node.getSymbol().getType() == SysYLexer.IF;
-    }
 
     private boolean isELSE(TerminalNode node) {
         return node.getSymbol().getType() == SysYLexer.ELSE;
@@ -449,16 +375,6 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
         hasASpace = false;
     }
 
-    // 如果是一个if紧跟着在父亲的else后面的stmt，就返回true
-    // TODO： 重新整理一下，当stmt是block的时候不需要换行
-    // 判断这个stmt是否是一个单独的block
-    private boolean isStmtABlock(ParseTree node) {
-        ParseTree childNode = node.getChild(0);
-        if (!(childNode instanceof RuleNode)) {
-            return false;
-        }
-        return ((((RuleNode) childNode).getRuleContext().getRuleIndex() == SysYParser.RULE_block));
-    }
 
     // 如果是单独的一条语句跟在While If else后面并且不是block，就返回true
     private boolean isStmtSingleINWhileIfElseAndNotABlock(ParseTree node) {
@@ -504,4 +420,20 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
             return true;
         }
     }
+
+    // 用于去除Else带单个语句后面的空格
+    // 如果后面带的stmt不是block，就返回true
+    private boolean isElseNeighborsStmtNotBlock(TerminalNode node){
+        ParseTree parentNode = node.getParent();
+        if (!(parentNode instanceof RuleNode)) {
+            System.err.println("wrong");
+            System.exit(0);
+        }
+        ParseTree brother6 = parentNode.getChild(6);
+        if ((brother6 instanceof TerminalNode)) {
+            return false;
+        }
+        return InStmtNotBlock(brother6);
+    }
+
 }
