@@ -1,7 +1,23 @@
-int test(){
-    int a = 5;
-    if (a == b)
-        return a;
-    else
-        return b;
+int a = 5;
+const int i = 8;
+int myFault(){
+const int b =7;
+    a = 8;
+    b  = 7;
+    if (a == b){
+        if (a == c){
+            if (a == d){
+             if(a == e){
+
+             }else
+                a = c;
+
+            }else
+                a = d;
+        }
+    }
+}
+
+void UNhappy(){
+
 }
