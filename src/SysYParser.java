@@ -19,8 +19,8 @@ public class SysYParser extends Parser {
 		CONST=1, INT=2, VOID=3, IF=4, ELSE=5, WHILE=6, BREAK=7, CONTINUE=8, RETURN=9, 
 		PLUS=10, MINUS=11, MUL=12, DIV=13, MOD=14, ASSIGN=15, EQ=16, NEQ=17, LT=18, 
 		GT=19, LE=20, GE=21, NOT=22, AND=23, OR=24, L_PAREN=25, R_PAREN=26, L_BRACE=27, 
-		R_BRACE=28, L_BRACKT=29, R_BRACKT=30, COMMA=31, SEMICOLON=32, IDENT=33, 
-		INTEGER_CONST=34, WS=35, LINE_COMMENT=36, MULTILINE_COMMENT=37;
+		R_BRACE=28, L_BRACKT=29, R_BRACKT=30, COMMA=31, IDENT=32, INTEGER_CONST=33, 
+		WS=34, LINE_COMMENT=35, MULTILINE_COMMENT=36, SEMICOLON=37;
 	public static final int
 		RULE_program = 0, RULE_compUnit = 1, RULE_decl = 2, RULE_constDecl = 3, 
 		RULE_constDef = 4, RULE_constInitVal = 5, RULE_varDecl = 6, RULE_varDef = 7, 
@@ -43,7 +43,7 @@ public class SysYParser extends Parser {
 			null, "'const'", "'int'", "'void'", "'if'", "'else'", "'while'", "'break'", 
 			"'continue'", "'return'", "'+'", "'-'", "'*'", "'/'", "'%'", "'='", "'=='", 
 			"'!='", "'<'", "'>'", "'<='", "'>='", "'!'", "'&&'", "'||'", "'('", "')'", 
-			"'{'", "'}'", "'['", "']'", "','", "';'"
+			"'{'", "'}'", "'['", "']'", "','"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
@@ -52,8 +52,8 @@ public class SysYParser extends Parser {
 			null, "CONST", "INT", "VOID", "IF", "ELSE", "WHILE", "BREAK", "CONTINUE", 
 			"RETURN", "PLUS", "MINUS", "MUL", "DIV", "MOD", "ASSIGN", "EQ", "NEQ", 
 			"LT", "GT", "LE", "GE", "NOT", "AND", "OR", "L_PAREN", "R_PAREN", "L_BRACE", 
-			"R_BRACE", "L_BRACKT", "R_BRACKT", "COMMA", "SEMICOLON", "IDENT", "INTEGER_CONST", 
-			"WS", "LINE_COMMENT", "MULTILINE_COMMENT"
+			"R_BRACE", "L_BRACKT", "R_BRACKT", "COMMA", "IDENT", "INTEGER_CONST", 
+			"WS", "LINE_COMMENT", "MULTILINE_COMMENT", "SEMICOLON"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -1181,7 +1181,7 @@ public class SysYParser extends Parser {
 			setState(192);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << CONST) | (1L << INT) | (1L << IF) | (1L << WHILE) | (1L << BREAK) | (1L << CONTINUE) | (1L << RETURN) | (1L << PLUS) | (1L << MINUS) | (1L << NOT) | (1L << L_PAREN) | (1L << L_BRACE) | (1L << SEMICOLON) | (1L << IDENT) | (1L << INTEGER_CONST))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << CONST) | (1L << INT) | (1L << IF) | (1L << WHILE) | (1L << BREAK) | (1L << CONTINUE) | (1L << RETURN) | (1L << PLUS) | (1L << MINUS) | (1L << NOT) | (1L << L_PAREN) | (1L << L_BRACE) | (1L << IDENT) | (1L << INTEGER_CONST) | (1L << SEMICOLON))) != 0)) {
 				{
 				{
 				setState(189);
@@ -1258,9 +1258,9 @@ public class SysYParser extends Parser {
 			case NOT:
 			case L_PAREN:
 			case L_BRACE:
-			case SEMICOLON:
 			case IDENT:
 			case INTEGER_CONST:
+			case SEMICOLON:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(198);
@@ -2252,16 +2252,16 @@ public class SysYParser extends Parser {
 		"\2\29:\3\2\2\2:8\3\2\2\2:;\3\2\2\2;<\3\2\2\2<=\7\2\2\3=\5\3\2\2\2>A\5"+
 		"\b\5\2?A\5\16\b\2@>\3\2\2\2@?\3\2\2\2A\7\3\2\2\2BC\7\3\2\2CD\7\4\2\2D"+
 		"I\5\n\6\2EF\7!\2\2FH\5\n\6\2GE\3\2\2\2HK\3\2\2\2IG\3\2\2\2IJ\3\2\2\2J"+
-		"L\3\2\2\2KI\3\2\2\2LM\7\"\2\2M\t\3\2\2\2NU\7#\2\2OP\7\37\2\2PQ\5\60\31"+
+		"L\3\2\2\2KI\3\2\2\2LM\7\'\2\2M\t\3\2\2\2NU\7\"\2\2OP\7\37\2\2PQ\5\60\31"+
 		"\2QR\7 \2\2RT\3\2\2\2SO\3\2\2\2TW\3\2\2\2US\3\2\2\2UV\3\2\2\2VX\3\2\2"+
 		"\2WU\3\2\2\2XY\7\21\2\2YZ\5\f\7\2Z\13\3\2\2\2[i\5\60\31\2\\e\7\35\2\2"+
 		"]b\5\f\7\2^_\7!\2\2_a\5\f\7\2`^\3\2\2\2ad\3\2\2\2b`\3\2\2\2bc\3\2\2\2"+
 		"cf\3\2\2\2db\3\2\2\2e]\3\2\2\2ef\3\2\2\2fg\3\2\2\2gi\7\36\2\2h[\3\2\2"+
 		"\2h\\\3\2\2\2i\r\3\2\2\2jk\7\4\2\2kp\5\20\t\2lm\7!\2\2mo\5\20\t\2nl\3"+
-		"\2\2\2or\3\2\2\2pn\3\2\2\2pq\3\2\2\2qs\3\2\2\2rp\3\2\2\2st\7\"\2\2t\17"+
-		"\3\2\2\2u|\7#\2\2vw\7\37\2\2wx\5\60\31\2xy\7 \2\2y{\3\2\2\2zv\3\2\2\2"+
-		"{~\3\2\2\2|z\3\2\2\2|}\3\2\2\2}\u008c\3\2\2\2~|\3\2\2\2\177\u0086\7#\2"+
-		"\2\u0080\u0081\7\37\2\2\u0081\u0082\5\60\31\2\u0082\u0083\7 \2\2\u0083"+
+		"\2\2\2or\3\2\2\2pn\3\2\2\2pq\3\2\2\2qs\3\2\2\2rp\3\2\2\2st\7\'\2\2t\17"+
+		"\3\2\2\2u|\7\"\2\2vw\7\37\2\2wx\5\60\31\2xy\7 \2\2y{\3\2\2\2zv\3\2\2\2"+
+		"{~\3\2\2\2|z\3\2\2\2|}\3\2\2\2}\u008c\3\2\2\2~|\3\2\2\2\177\u0086\7\""+
+		"\2\2\u0080\u0081\7\37\2\2\u0081\u0082\5\60\31\2\u0082\u0083\7 \2\2\u0083"+
 		"\u0085\3\2\2\2\u0084\u0080\3\2\2\2\u0085\u0088\3\2\2\2\u0086\u0084\3\2"+
 		"\2\2\u0086\u0087\3\2\2\2\u0087\u0089\3\2\2\2\u0088\u0086\3\2\2\2\u0089"+
 		"\u008a\7\21\2\2\u008a\u008c\5\22\n\2\u008bu\3\2\2\2\u008b\177\3\2\2\2"+
@@ -2276,7 +2276,7 @@ public class SysYParser extends Parser {
 		"\u00a4\25\3\2\2\2\u00a5\u00a6\t\2\2\2\u00a6\27\3\2\2\2\u00a7\u00ac\5\32"+
 		"\16\2\u00a8\u00a9\7!\2\2\u00a9\u00ab\5\30\r\2\u00aa\u00a8\3\2\2\2\u00ab"+
 		"\u00ae\3\2\2\2\u00ac\u00aa\3\2\2\2\u00ac\u00ad\3\2\2\2\u00ad\31\3\2\2"+
-		"\2\u00ae\u00ac\3\2\2\2\u00af\u00b0\7\4\2\2\u00b0\u00bc\7#\2\2\u00b1\u00b2"+
+		"\2\u00ae\u00ac\3\2\2\2\u00af\u00b0\7\4\2\2\u00b0\u00bc\7\"\2\2\u00b1\u00b2"+
 		"\7\37\2\2\u00b2\u00b9\7 \2\2\u00b3\u00b4\7\37\2\2\u00b4\u00b5\5\"\22\2"+
 		"\u00b5\u00b6\7 \2\2\u00b6\u00b8\3\2\2\2\u00b7\u00b3\3\2\2\2\u00b8\u00bb"+
 		"\3\2\2\2\u00b9\u00b7\3\2\2\2\u00b9\u00ba\3\2\2\2\u00ba\u00bd\3\2\2\2\u00bb"+
@@ -2286,16 +2286,16 @@ public class SysYParser extends Parser {
 		"\2\2\u00c4\u00c2\3\2\2\2\u00c5\u00c6\7\36\2\2\u00c6\35\3\2\2\2\u00c7\u00ca"+
 		"\5\6\4\2\u00c8\u00ca\5 \21\2\u00c9\u00c7\3\2\2\2\u00c9\u00c8\3\2\2\2\u00ca"+
 		"\37\3\2\2\2\u00cb\u00cc\5&\24\2\u00cc\u00cd\7\21\2\2\u00cd\u00ce\5\"\22"+
-		"\2\u00ce\u00cf\7\"\2\2\u00cf\u00ee\3\2\2\2\u00d0\u00d2\5\"\22\2\u00d1"+
-		"\u00d0\3\2\2\2\u00d1\u00d2\3\2\2\2\u00d2\u00d3\3\2\2\2\u00d3\u00ee\7\""+
+		"\2\u00ce\u00cf\7\'\2\2\u00cf\u00ee\3\2\2\2\u00d0\u00d2\5\"\22\2\u00d1"+
+		"\u00d0\3\2\2\2\u00d1\u00d2\3\2\2\2\u00d2\u00d3\3\2\2\2\u00d3\u00ee\7\'"+
 		"\2\2\u00d4\u00ee\5\34\17\2\u00d5\u00d6\7\6\2\2\u00d6\u00d7\7\33\2\2\u00d7"+
 		"\u00d8\5$\23\2\u00d8\u00d9\7\34\2\2\u00d9\u00dc\5 \21\2\u00da\u00db\7"+
 		"\7\2\2\u00db\u00dd\5 \21\2\u00dc\u00da\3\2\2\2\u00dc\u00dd\3\2\2\2\u00dd"+
 		"\u00ee\3\2\2\2\u00de\u00df\7\b\2\2\u00df\u00e0\7\33\2\2\u00e0\u00e1\5"+
 		"$\23\2\u00e1\u00e2\7\34\2\2\u00e2\u00e3\5 \21\2\u00e3\u00ee\3\2\2\2\u00e4"+
-		"\u00e5\7\t\2\2\u00e5\u00ee\7\"\2\2\u00e6\u00e7\7\n\2\2\u00e7\u00ee\7\""+
+		"\u00e5\7\t\2\2\u00e5\u00ee\7\'\2\2\u00e6\u00e7\7\n\2\2\u00e7\u00ee\7\'"+
 		"\2\2\u00e8\u00ea\7\13\2\2\u00e9\u00eb\5\"\22\2\u00ea\u00e9\3\2\2\2\u00ea"+
-		"\u00eb\3\2\2\2\u00eb\u00ec\3\2\2\2\u00ec\u00ee\7\"\2\2\u00ed\u00cb\3\2"+
+		"\u00eb\3\2\2\2\u00eb\u00ec\3\2\2\2\u00ec\u00ee\7\'\2\2\u00ed\u00cb\3\2"+
 		"\2\2\u00ed\u00d1\3\2\2\2\u00ed\u00d4\3\2\2\2\u00ed\u00d5\3\2\2\2\u00ed"+
 		"\u00de\3\2\2\2\u00ed\u00e4\3\2\2\2\u00ed\u00e6\3\2\2\2\u00ed\u00e8\3\2"+
 		"\2\2\u00ee!\3\2\2\2\u00ef\u00f0\b\22\1\2\u00f0\u00f1\7\33\2\2\u00f1\u00f2"+
@@ -2315,15 +2315,15 @@ public class SysYParser extends Parser {
 		"\u0118\u011d\5$\23\5\u0119\u011a\f\3\2\2\u011a\u011b\7\32\2\2\u011b\u011d"+
 		"\5$\23\4\u011c\u0110\3\2\2\2\u011c\u0113\3\2\2\2\u011c\u0116\3\2\2\2\u011c"+
 		"\u0119\3\2\2\2\u011d\u0120\3\2\2\2\u011e\u011c\3\2\2\2\u011e\u011f\3\2"+
-		"\2\2\u011f%\3\2\2\2\u0120\u011e\3\2\2\2\u0121\u0128\7#\2\2\u0122\u0123"+
+		"\2\2\u011f%\3\2\2\2\u0120\u011e\3\2\2\2\u0121\u0128\7\"\2\2\u0122\u0123"+
 		"\7\37\2\2\u0123\u0124\5\"\22\2\u0124\u0125\7 \2\2\u0125\u0127\3\2\2\2"+
 		"\u0126\u0122\3\2\2\2\u0127\u012a\3\2\2\2\u0128\u0126\3\2\2\2\u0128\u0129"+
-		"\3\2\2\2\u0129\'\3\2\2\2\u012a\u0128\3\2\2\2\u012b\u012c\7$\2\2\u012c"+
+		"\3\2\2\2\u0129\'\3\2\2\2\u012a\u0128\3\2\2\2\u012b\u012c\7#\2\2\u012c"+
 		")\3\2\2\2\u012d\u012e\t\7\2\2\u012e+\3\2\2\2\u012f\u0134\5.\30\2\u0130"+
 		"\u0131\7!\2\2\u0131\u0133\5.\30\2\u0132\u0130\3\2\2\2\u0133\u0136\3\2"+
 		"\2\2\u0134\u0132\3\2\2\2\u0134\u0135\3\2\2\2\u0135-\3\2\2\2\u0136\u0134"+
 		"\3\2\2\2\u0137\u0138\5\"\22\2\u0138/\3\2\2\2\u0139\u013a\5\"\22\2\u013a"+
-		"\61\3\2\2\2\u013b\u013c\7#\2\2\u013c\63\3\2\2\2#8:@IUbehp|\u0086\u008b"+
+		"\61\3\2\2\2\u013b\u013c\7\"\2\2\u013c\63\3\2\2\2#8:@IUbehp|\u0086\u008b"+
 		"\u0094\u0097\u009a\u00a0\u00ac\u00b9\u00bc\u00c2\u00c9\u00d1\u00dc\u00ea"+
 		"\u00ed\u00f9\u0100\u0108\u010a\u011c\u011e\u0128\u0134";
 	public static final ATN _ATN =
