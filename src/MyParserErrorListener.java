@@ -16,7 +16,7 @@ public class MyParserErrorListener extends BaseErrorListener {
     }
     public  void printParserErrorInfomation(){
         for (String msg: errorMsg){
-            System.err.println(msg);
+            System.out.println(msg);
         }
     }
 }

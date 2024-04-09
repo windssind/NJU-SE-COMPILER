@@ -50,9 +50,6 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
                         hasASpace = true;
                     }
                 }
-                /*if (isIFELSEWHILE(node)) {
-                    indentation += 1;
-                }*/
                 break;
             case SysYLexer.PLUS:
             case SysYLexer.MINUS:
