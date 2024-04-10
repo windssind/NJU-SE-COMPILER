@@ -47,7 +47,7 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
                 PrintTerminalNode(SGR_Name.LightCyan, node.getText(), isInDecl);
                 if ((!isCONTINUEBREAKRETURN(node) || (isRETURN(node) && !isRETURNNeighborsSEMICOLON(node)))) {
                     if (!hasASpace) {
-                        if ((!isELSE(node)) ||((isELSE(node) && isElseNeighborsASingleStmt(node)))){
+                        if ((!isELSE(node)) ||((isELSE(node) && !isElseNeighborsASingleStmt(node)))){
                             System.out.print(" ");
                             hasASpace = true;
                         }
@@ -451,7 +451,7 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
         if ((brother6 instanceof TerminalNode)) {
             return false;
         }
-        return brother6.getChildCount() > 1 && (brother6.getChild(0) instanceof TerminalNode);
+        return brother6.getChildCount() > 1 && brother6.getChild(brother6.getChildCount() - 1) instanceof TerminalNode &&((TerminalNode)(brother6.getChild(brother6.getChildCount() - 1)) ).getSymbol().getType() == SysYLexer.SEMICOLON;
     }
 
     // 这个也是Stmt不需要输出空行
