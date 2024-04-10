@@ -440,7 +440,7 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
     }
 
     // 用于去除Else带单个语句后面的空格
-    // 如果Else后面带的是SingleStmt(就是不是block)
+    // 如果Else后面带的是SingleStmt(就是不是block),就不需要输出空格
     private boolean isElseNeighborsASingleStmt(TerminalNode node){
         ParseTree parentNode = node.getParent();
         if (!(parentNode instanceof RuleNode)) {
