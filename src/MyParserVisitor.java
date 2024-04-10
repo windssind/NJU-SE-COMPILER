@@ -425,7 +425,7 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
                 }
             }
         }
-        return !beginsWIthIf;
+        return !beginsWIthIf && !isStmtABlock;
     }
 
 

@@ -17,4 +17,9 @@ return +0x40;
 while(a == 0)
 if(a == b )
 while(c == 0) a = c;
+if (a == b){
+    return a;
+}else{
+return b;
+}
 }
