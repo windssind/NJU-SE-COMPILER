@@ -1,12 +1,8 @@
 
-import org.antlr.v4.runtime.Parser;
-import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.tree.Tree;
-import org.antlr.v4.tool.Rule;
 
 import java.util.Stack;
 
@@ -51,7 +47,7 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
                 PrintTerminalNode(SGR_Name.LightCyan, node.getText(), isInDecl);
                 if ((!isCONTINUEBREAKRETURN(node) || (isRETURN(node) && !isRETURNNeighborsSEMICOLON(node)))) {
                     if (!hasASpace) {
-                        if ((!isELSE(node)) ||(isELSE(node) && !isElseNeighborsStmtNotBlock(node))){
+                        if ((!isELSE(node)) ||((isELSE(node) && isElseNeighborsASingleStmt(node)))){
                             System.out.print(" ");
                             hasASpace = true;
                         }
@@ -178,12 +174,12 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
 
     @Override
     public Void visitStmt(SysYParser.StmtContext ctx) {
-        // 如果这个语句是if或者else或者while后面接的stmt并且这个是一个block，那么就不需要输出一个空行
+        // 如果这个语句是if或者else或者while后面接的stmt并且这个是一个block 或者这是一个If开头跟在ELSE后面的Stmt，那么就不需要输出一个空行
         // 对！这个逻辑就顺畅了 基本确定是正确的，不要再改动了
-        if (isStmtSingleINWhileIfElseAndNotABlock(ctx)) {
+        if (isStmtSingleINWhileIfAndNotABlockOrIfNotFollowsElse(ctx)) {
             indentation += 1;
         }
-        if (!isIFELSEWHILEStmtAndIsABlock(ctx) && !isInLineOne) {
+        if (!isIFELSEWHILEStmtAndIsABlock(ctx) &&  !isStmtFollowsElseAndBeginsWithIf(ctx) && !isInLineOne) {
             System.out.println();
             isInLineOne = false;
             PrintIndentation();
@@ -193,7 +189,7 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
             isInStmtNotBlock = true;
         }
         super.visitStmt(ctx);
-        if (isStmtSingleINWhileIfElseAndNotABlock(ctx)) {
+        if (isStmtSingleINWhileIfAndNotABlockOrIfNotFollowsElse(ctx)) {
             indentation -= 1;
         }
         isInStmtNotBlock = false;
@@ -385,8 +381,10 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
     }
 
 
-    // 如果是单独的一条语句跟在While If else后面并且不是block，就返回true
-    private boolean isStmtSingleINWhileIfElseAndNotABlock(ParseTree node) {
+    // 用于控制缩进，IFWHILE后面不是一个单独的block就需要手动+缩进，或者else后面没有if也需要手动+缩进
+    // 新的思考方向: 这个if else是嵌套在别的if else里面的
+    private boolean isStmtSingleINWhileIfAndNotABlockOrIfNotFollowsElse(ParseTree node) {
+        // 刚开始判断这个stmt是否是while或者if中的语句
         ParseTree parentNode = node.getParent();
         if (!(parentNode instanceof RuleNode)) {
             System.err.println("wrong");
@@ -397,18 +395,12 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
         if (!(brother1 instanceof TerminalNode)) {
             return false;
         }
-        boolean isIFELSEWHILE = false;
+        boolean isIfWhile = false;
         boolean isStmtABlock = false;
-        if (((TerminalNode) brother1).getSymbol().getType() == SysYLexer.IF || ((TerminalNode) brother1).getSymbol().getType() == SysYLexer.WHILE) {
-            isIFELSEWHILE = true;
-        }
-        if (parentNode.getChildCount() >= 5) {
-            ParseTree brother5 = parentNode.getChild(5);
-            if (brother5 instanceof TerminalNode) {
-                if (((TerminalNode) brother5).getSymbol().getType() == SysYLexer.ELSE) {
-                    isIFELSEWHILE = true;
-                }
-            }
+        boolean beginsWIthIf = false;
+        // 判断是否是IF或者While后面的stmt
+        if (parentNode.getChild(4) == node &&(((TerminalNode) brother1).getSymbol().getType() == SysYLexer.IF || ((TerminalNode) brother1).getSymbol().getType() == SysYLexer.WHILE) ){
+            isIfWhile = true;
         }
         ParseTree childNode = node.getChild(0);
         if (childNode instanceof RuleNode) {
@@ -416,7 +408,24 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
                 isStmtABlock = true;
             }
         }
-        return !isStmtABlock && isIFELSEWHILE;
+        if ((isIfWhile) ) return !isStmtABlock; // 说明是if while 后面的stmt并且不是block，可以缩进+1
+
+        // 到了这里说明这个stmt是else之后的
+        if (parentNode.getChildCount() >= 5) {
+            ParseTree brother5 = parentNode.getChild(5);
+            ParseTree brother6 = parentNode.getChild(6);
+            if (brother6 == node && brother5 instanceof TerminalNode) {
+                isIfWhile = false;
+                if (((TerminalNode) brother5).getSymbol().getType() == SysYLexer.ELSE) {
+                    if (childNode instanceof TerminalNode){
+                        if (((TerminalNode) childNode).getSymbol().getType() == SysYLexer.IF){
+                            beginsWIthIf = true;
+                        }
+                    }
+                }
+            }
+        }
+        return !beginsWIthIf;
     }
 
 
@@ -431,8 +440,8 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
     }
 
     // 用于去除Else带单个语句后面的空格
-    // 如果后面带的stmt不是block，就返回true
-    private boolean isElseNeighborsStmtNotBlock(TerminalNode node){
+    // 如果Else后面带的是SingleStmt(就是不是block)
+    private boolean isElseNeighborsASingleStmt(TerminalNode node){
         ParseTree parentNode = node.getParent();
         if (!(parentNode instanceof RuleNode)) {
             System.err.println("wrong");
@@ -442,7 +451,27 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
         if ((brother6 instanceof TerminalNode)) {
             return false;
         }
-        return InStmtNotBlock(brother6);
+        return brother6.getChildCount() > 1 && (brother6.getChild(0) instanceof TerminalNode);
+    }
+
+    // 这个也是Stmt不需要输出空行
+    private boolean isStmtFollowsElseAndBeginsWithIf(ParseTree node){
+        ParseTree parentNode = node.getParent();
+        ParseTree brother6 = parentNode.getChild(5);
+        if (node != parentNode.getChild(6)){
+            return false;
+        }
+        if (brother6 instanceof TerminalNode) {
+            if (((TerminalNode) brother6).getSymbol().getType() == SysYLexer.ELSE) {
+                ParseTree childNode = node.getChild(0);
+                if (childNode instanceof TerminalNode) {
+                    if (((TerminalNode) childNode).getSymbol().getType() == SysYLexer.IF) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
 }
