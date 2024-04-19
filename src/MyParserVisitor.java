@@ -252,20 +252,6 @@ public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
             System.err.println("wrong");
             System.exit(0);
         }
-        /*
-        for (int i = 0; i < 10; ++i) {
-            if (((RuleNode) parentNode).getRuleContext().getRuleIndex() == SysYParser.RULE_block) {
-                parentNode = parentNode.getParent();
-                if (((RuleNode) parentNode).getRuleContext().getRuleIndex() == SysYParser.RULE_stmt) {
-                    parentNode = parentNode.getParent(); // 走到stmt的stmt环节
-                    return parentNode.getChildCount() == 1;
-                } else {
-                    return false;
-                }
-            }
-            parentNode = parentNode.getParent();
-            if (parentNode == null) return false;
-        }*/
         if (((RuleNode) parentNode).getRuleContext().getRuleIndex() == SysYParser.RULE_block) {
             parentNode = parentNode.getParent();
             if (((RuleNode) parentNode).getRuleContext().getRuleIndex() == SysYParser.RULE_stmt) {
