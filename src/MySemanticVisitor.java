@@ -399,7 +399,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
     // 如果返回的是一个null，就说明获取TYPE失效（也就是该lval不是一个合法的type）
     // 其实这个是有问题的，应该是通过结构获取type而不是表
     private Type getTypeOflval(SysYParser.LValContext ctx) {
-        /*SymbolTable.Symbol symbol = currentTable.GetSymbol(ctx.IDENT().getText());
+        SymbolTable.Symbol symbol = currentTable.GetSymbol(ctx.IDENT().getText());
         if (symbol != null) {
             Type curType = symbol.getType();
             if (symbol.getType().getType().equals("array")) {
@@ -420,7 +420,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         } else
             return null;
 
-         */
+        /*
         if (ctx.exp().isEmpty()){
             // 说明只是一个普通的左值
             return new IntType();
@@ -443,7 +443,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
                 // 符号表中没找到，直接返回null
                 return null;
             }
-        }
+        }*/
     }
 
     private boolean isValAssignLegal(Type lval, Type exp) {
