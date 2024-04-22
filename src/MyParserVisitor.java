@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.Token;
 
 import java.util.Stack;
 
-public class MyParserVisitor extends SysYParserBaseVisitor<Void> {
+public class MyParserVisitor extendsSysYParserBaseVisitor<Void> {
 
     private int indentation = 0;
     private boolean isInDecl = false;
