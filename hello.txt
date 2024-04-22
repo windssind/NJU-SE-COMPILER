@@ -1,9 +1,4 @@
 int a[1];
-int b[1];
 int main(){
-    if (a == b){
-        return a();
-    }else {
-        return b();
-    }
+    return a();
 }

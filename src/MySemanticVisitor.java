@@ -229,6 +229,9 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         return null;
     }
 
+    /*
+    这个是特定用于函数调用时候的funcName，声明时不会使用
+     */
     @Override
     public Void visitFuncName(SysYParser.FuncNameContext ctx) {
         if (!currentTable.HasSymbol(ctx.IDENT().getText())) {
@@ -271,8 +274,9 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         }
 
         if (ctx.RETURN() != null) {
+            visit(ctx.exp());
             // 注意，本次实验中函数的返回值只有int
-            if (ctx.exp() == null || !getTypeOfExp(ctx.exp()).getType().equals("int")) {
+            if (ctx.exp() == null || (getTypeOfExp(ctx.exp()) != null && !getTypeOfExp(ctx.exp()).getType().equals("int"))) {
                 errorReporter.report(ErrorReporter.ErrorType.ReturnTypeFalse, ctx.getStart().getLine(), ctx.getText());
             }
             return null;
@@ -354,14 +358,21 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         } else if (ctx.number() != null) {
             return new IntType();
         } else { // 这里是函数调用
-            ArrayList<Type> paramList = new ArrayList<Type>();
+            /*ArrayList<Type> paramList = new ArrayList<Type>();
             if (ctx.funcRParams() != null) {
                 int paramNum = ctx.funcRParams().getChildCount();
                 for (int i = 0; i < paramNum; i++) {
                     paramList.add(getTypeOfExp(ctx.funcRParams().param().get(i).exp()));
                 }
             }
-            return new FunctionType(new IntType(),paramList);
+            return new FunctionType(new IntType(),paramList);*/
+            if ((currentTable.GetSymbol(ctx.funcName().IDENT().getText())) == null){
+                return null;
+            }else if (currentTable.GetSymbol(ctx.funcName().IDENT().getText()).getType() instanceof FunctionType){
+                return ((FunctionType)currentTable.GetSymbol(ctx.funcName().IDENT().getText()).getType()).getRetTy();
+            }else{ // 这里是数组
+                return null;
+            }
         }
     }
 
