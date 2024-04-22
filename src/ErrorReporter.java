@@ -16,6 +16,7 @@ public class ErrorReporter {
         LeftHandSideAFunc
     }
 
+    public boolean hasError = false;
     public void report(ErrorType type, int lineNO, String name)
     {
         switch (type)
@@ -57,5 +58,6 @@ public class ErrorReporter {
                 System.err.println("Error type 6 at Line " + lineNO + ": Type mismatched for operands.");
                 break;
         }
+        hasError = true;
     }
 }

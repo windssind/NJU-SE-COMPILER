@@ -8,7 +8,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
 
     private SymbolTable currentTable;
 
-    private ErrorReporter errorReporter;
+    public ErrorReporter errorReporter;
 
     private Type curFuncType;
 
@@ -161,14 +161,6 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
                 return null;
             }
         } else if (lvalSymbol.type.getType().equals("array")) { // array没有带[]
-            /*if (ctx.L_BRACKT().isEmpty()) {
-                errorReporter.report(ErrorReporter.ErrorType.arrayDimFalse, ctx.getStart().getLine(), ctx.IDENT().getText());
-                return null;
-            }*/
-            /*if (getDimOfArray((ArrayType) (lvalSymbol.getType())) != ctx.L_BRACKT().size()){
-                errorReporter.report(ErrorReporter.ErrorType.arrayDimFalse, ctx.getStart().getLine(), ctx.IDENT().getText());
-                return null;
-            }*/
             int dim = getDimOfArray((ArrayType) (lvalSymbol.getType()));
             int BracketSize = ctx.L_BRACKT().size();
             if (dim < BracketSize) {
@@ -377,7 +369,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         int dim = 0;
         Type curType = arrayType;
         while (curType instanceof ArrayType) {
-            curType = arrayType.getElementType();
+            curType = ((ArrayType)curType).getElementType();
             dim++;
         }
         return dim;

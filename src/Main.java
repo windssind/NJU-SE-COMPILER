@@ -59,6 +59,10 @@ public class Main
         MySemanticVisitor mySemanticVisitor = new MySemanticVisitor();
         mySemanticVisitor.visit(tree);
 
+        if (!mySemanticVisitor.errorReporter.hasError){
+            System.err.println("No semantic errors in the program!");
+        }
+
     }
 
     private  static void printSysYTokenInformation(Token t){
