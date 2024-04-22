@@ -41,8 +41,6 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
             errorReporter.report(ErrorReporter.ErrorType.RedefinedFunc, ctx.getStart().getLine(), funcName);
             return null;
         }
-        //visit(ctx.funcName());
-        visit(ctx.L_PAREN());
         //初始化参数列表
         ArrayList<Type> paramsTyList = new ArrayList<>();
 
@@ -55,7 +53,6 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         // 给符号表添加一个函数信息
         currentTable.AddSymbol(funcName, new FunctionType(retType,paramsTyList), true);
 
-        visit(ctx.R_PAREN());
         visit(ctx.block());
         return null;
     }
@@ -67,7 +64,6 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         SymbolTable newTable = currentTable.getCopy();
         symbolTableStack.push(currentTable);
         currentTable = newTable;
-        visit(ctx.L_BRACE());
         if (ctx.getParent() instanceof SysYParser.FuncDefContext){
             tmpSymbolTable.GetSymbols().forEach(symbol -> {
                 currentTable.AddSymbol(symbol.name, symbol.type, symbol.isGlobal);
@@ -75,7 +71,6 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
             tmpSymbolTable.ClearSymbols();
         }
         ctx.blockItem().forEach(this::visit); // 依次visit block中的节点
-        visit(ctx.R_BRACE());
         // 再重新更换当前符号表
         currentTable = symbolTableStack.peek();
         symbolTableStack.pop();
@@ -108,7 +103,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
             int dim = ctx.constExp().size();
             Type elementType = null;
             Type curInnerType = new IntType();
-            for (int i = 0; i < dim - 1; i++) {
+            for (int i = 0; i < dim ; i++) {
                 elementType = new ArrayType(curInnerType, 0);
                 curInnerType = elementType;
             }
