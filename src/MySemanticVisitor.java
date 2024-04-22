@@ -188,7 +188,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
             visit(ctx.funcName()); // 这里会检查funcName是否是一个函数
             // 只有符号表中有这个函数才会继续接下来
             if (currentTable.GetSymbol(ctx.funcName().IDENT().getText()) != null) {
-                if (currentTable.GetSymbol(ctx.funcName().IDENT().getText()).type.getType() == "function") { //简单判断一下这个结点是否是funcType，如果是就继续下一步的参数检测
+                if (currentTable.GetSymbol(ctx.funcName().IDENT().getText()).type.getType().equals("function")) { //简单判断一下这个结点是否是funcType，如果是就继续下一步的参数检测
                     // 这里确保了这是一个函数，然后执行接下来的参数检测
                     int paramSize = ctx.funcRParams() != null ? ctx.funcRParams().param().size() : 0;
                     int needParamSize = ((FunctionType) currentTable.GetSymbol(ctx.funcName().IDENT().getText()).type).getParamsType().size();
@@ -306,6 +306,15 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         return null;
     }
 
+    @Override
+    public Void visitCond(SysYParser.CondContext ctx) {
+        if (getTypeOfCond(ctx) == null || getTypeOfCond(ctx).getType().equals("int")) {
+            errorReporter.report(ErrorReporter.ErrorType.TypeMisMatchForOp, ctx.getStart().getLine(), ctx.getText());
+            return null;
+        }
+        return null;
+    }
+
     private void InitializeFParamsList(SysYParser.FuncFParamsContext ctx, ArrayList<Type> paramList) {
         if (ctx == null){
             return;
@@ -336,7 +345,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         return ctx.getParent() instanceof SysYParser.CompUnitContext;
     }
 
-    // 保证了表中是有对应的项的
+    // 返回给定的字面类型(也就是你的exp的结构展现出来的你的类型)，还要在出口函数处和Symbol的比较
     private Type getTypeOfExp(SysYParser.ExpContext ctx) {
         if (!ctx.exp().isEmpty()) {
             return getTypeOfExp(ctx.exp().get(0));
@@ -344,14 +353,16 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
             return getTypeOflval(ctx.lVal());
         } else if (ctx.number() != null) {
             return new IntType();
-        } else { // 这里是函数名
-            if (currentTable.GetSymbol(ctx.funcName().IDENT().getText()) == null) {
-                return null;
-            } else {
-                return ((FunctionType) currentTable.GetSymbol(ctx.funcName().IDENT().getText()).getType()).getRetTy();
+        } else { // 这里是函数调用
+            ArrayList<Type> paramList = new ArrayList<Type>();
+            if (ctx.funcRParams() != null) {
+                int paramNum = ctx.funcRParams().getChildCount();
+                for (int i = 0; i < paramNum; i++) {
+                    paramList.add(getTypeOfExp(ctx.funcRParams().param().get(i).exp()));
+                }
             }
+            return new FunctionType(new IntType(),paramList);
         }
-
     }
 
     // 如果返回的是一个null，就说明获取TYPE失效（也就是该lval不是一个合法的type）
@@ -403,6 +414,20 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
 
     private void AddFuncParamToCurTable(SysYParser.FuncFParamsContext ctx){
         SysYParser.FuncFParamContext funcFParamContext = ctx.funcFParam();
+    }
+
+    private Type getTypeOfCond(SysYParser.CondContext ctx){
+        if (ctx.exp() != null){
+            return getTypeOfExp(ctx.exp());
+        }else{
+            Type cond1Type = getTypeOfCond(ctx.cond().get(0));
+            Type cond2Type = getTypeOfCond(ctx.cond().get(1));
+            if (cond1Type.getType().equals("int") && cond2Type.getType().equals("int")){
+                return new IntType();
+            }else{
+                return null;
+            }
+        }
     }
 
 
