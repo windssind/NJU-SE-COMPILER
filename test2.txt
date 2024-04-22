@@ -1,0 +1,14 @@
+const int a[5] = {1,2,3,4,5};
+
+int f(){
+    int a = 5;
+    int b = 3;
+    int c = a;
+}
+
+int main(){
+    int c = 4;
+    if(a[5] == c){
+        b = c;
+    }
+}

@@ -98,7 +98,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         }
         visit(ctx.IDENT());
 
-        if (ctx.constExp().size() > 1) { // 如果是数组
+        if (!ctx.constExp().isEmpty()) { // 如果是数组
             // 1. 获取数组的维度
             int dim = ctx.constExp().size();
             Type elementType = null;
@@ -332,7 +332,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
 
     @Override
     public Void visitCond(SysYParser.CondContext ctx) {
-        if (getTypeOfCond(ctx) == null || getTypeOfCond(ctx).getType().equals("int")) {
+        if (getTypeOfCond(ctx) == null || !getTypeOfCond(ctx).getType().equals("int")) {
             errorReporter.report(ErrorReporter.ErrorType.TypeMisMatchForOp, ctx.getStart().getLine(), ctx.getText());
             return null;
         }
@@ -397,8 +397,9 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
     }
 
     // 如果返回的是一个null，就说明获取TYPE失效（也就是该lval不是一个合法的type）
+    // 其实这个是有问题的，应该是通过结构获取type而不是表
     private Type getTypeOflval(SysYParser.LValContext ctx) {
-        SymbolTable.Symbol symbol = currentTable.GetSymbol(ctx.IDENT().getText());
+        /*SymbolTable.Symbol symbol = currentTable.GetSymbol(ctx.IDENT().getText());
         if (symbol != null) {
             Type curType = symbol.getType();
             if (symbol.getType().getType().equals("array")) {
@@ -418,6 +419,31 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
             return curType;
         } else
             return null;
+
+         */
+        if (ctx.exp().isEmpty()){
+            // 说明只是一个普通的左值
+            return new IntType();
+        }else{
+            // 这个是数组
+            // 先要从符号表中找到，然后根据层数剥离
+            if (currentTable.GetSymbol(ctx.IDENT().getText()) != null){
+                // 成功找到
+                int dim = ctx.exp().size();
+                Type currentType = currentTable.GetSymbol(ctx.IDENT().getText()).getType();
+                for (int i = 0; i < dim; ++i){
+                    if (currentType instanceof ArrayType){
+                        currentType = ((ArrayType) currentType).getElementType();
+                    }else{
+                        return null;
+                    }
+                }
+                return currentType;
+            }else{
+                // 符号表中没找到，直接返回null
+                return null;
+            }
+        }
     }
 
     private boolean isValAssignLegal(Type lval, Type exp) {
@@ -453,6 +479,9 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         } else {
             Type cond1Type = getTypeOfCond(ctx.cond().get(0));
             Type cond2Type = getTypeOfCond(ctx.cond().get(1));
+            if (cond1Type == null || cond2Type == null){
+                return null;
+            }
             if (cond1Type.getType().equals("int") && cond2Type.getType().equals("int")) {
                 return new IntType();
             } else {
