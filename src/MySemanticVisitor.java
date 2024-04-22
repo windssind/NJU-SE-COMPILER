@@ -135,6 +135,8 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         }
         visit(ctx.IDENT());
 
+        Type lvalType ;
+        Type expType;
         if (!ctx.constExp().isEmpty()) { // 如果是数组
             // 1. 获取数组的维度
             int dim = ctx.constExp().size();
@@ -145,11 +147,26 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
                 curInnerType = elementType;
             }
             currentTable.AddSymbol(varStr, elementType, isGlobal);
+            lvalType = elementType;
         } else {
             currentTable.AddSymbol(varStr, new IntType(), isGlobal);
+            lvalType = new IntType();
         }
-        if (ctx.initVal() != null)
+
+        if (ctx.initVal() != null){
             visitInitVal(ctx.initVal());
+            expType = getTypeOfExp(ctx.initVal().exp());
+            if (!isValAssignLegal(lvalType, expType)) {
+                if (lvalType.getType().equals("function")){
+                    errorReporter.report(ErrorReporter.ErrorType.LeftHandSideAFunc, ctx.getStart().getLine(), ctx.getText());
+                }else{
+                    errorReporter.report(ErrorReporter.ErrorType.TypeMisMatchedForAssignment, ctx.getStart().getLine(), ctx.getText());
+                }
+            }
+        }
+
+
+
         return null;
     }
 
