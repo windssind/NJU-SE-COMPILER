@@ -3,6 +3,10 @@ int f(int i,int i){return 0;}
 int main(){
     int arr[1][1];
     {
+        int test[5][4] = arr[1];
         arr[1][1] =1;
+        int b = 5;
+        b = 4;
     }
+    b = 3;
 }
