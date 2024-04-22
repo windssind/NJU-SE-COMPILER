@@ -9,11 +9,12 @@ int main(){
     }
 }
 
-int func(int a,int b){
+int func(int a,int b,int c[][]){
     f(a);
     f(b);
     {
         f(a);
         f(b);
+        f(c);
     }
 }
