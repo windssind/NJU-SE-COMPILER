@@ -45,13 +45,13 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         ArrayList<Type> paramsTyList = new ArrayList<>();
 
 
-        if (ctx.funcFParams() != null){
+        if (ctx.funcFParams() != null) {
             InitializeFParamsList(ctx.funcFParams(), paramsTyList);
             visit(ctx.funcFParams());
         }
 
         // 给符号表添加一个函数信息
-        currentTable.AddSymbol(funcName, new FunctionType(retType,paramsTyList), true);
+        currentTable.AddSymbol(funcName, new FunctionType(retType, paramsTyList), true);
 
         visit(ctx.block());
         return null;
@@ -64,7 +64,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         SymbolTable newTable = currentTable.getCopy();
         symbolTableStack.push(currentTable);
         currentTable = newTable;
-        if (ctx.getParent() instanceof SysYParser.FuncDefContext){
+        if (ctx.getParent() instanceof SysYParser.FuncDefContext) {
             tmpSymbolTable.GetSymbols().forEach(symbol -> {
                 currentTable.AddSymbol(symbol.name, symbol.type, symbol.isGlobal);
             });
@@ -103,7 +103,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
             int dim = ctx.constExp().size();
             Type elementType = null;
             Type curInnerType = new IntType();
-            for (int i = 0; i < dim ; i++) {
+            for (int i = 0; i < dim; i++) {
                 elementType = new ArrayType(curInnerType, 0);
                 curInnerType = elementType;
             }
@@ -126,16 +126,17 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
                 return null;
             } else { // 重点，涉及到覆盖
                 // 如果我是一个局部变量，就删除掉这个变量的声明，重新加上去
-                if (currentTable.GetSymbol(varStr).isGlobal()){
+                if (currentTable.GetSymbol(varStr).isGlobal()) {
                     currentTable.DeleteSymbol(varStr);
-                }else{
-                    errorReporter.report(ErrorReporter.ErrorType.RedefinedVar, ctx.getStart().getLine(), varStr);;
+                } else {
+                    errorReporter.report(ErrorReporter.ErrorType.RedefinedVar, ctx.getStart().getLine(), varStr);
+                    ;
                 }
             }
         }
         visit(ctx.IDENT());
 
-        Type lvalType ;
+        Type lvalType;
         Type expType;
         if (!ctx.constExp().isEmpty()) { // 如果是数组
             // 1. 获取数组的维度
@@ -153,18 +154,24 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
             lvalType = new IntType();
         }
 
-        if (ctx.initVal() != null){
+        if (ctx.initVal() != null) {
             visitInitVal(ctx.initVal());
-            expType = getTypeOfExp(ctx.initVal().exp());
-            if (!isValAssignLegal(lvalType, expType)) {
-                if (lvalType.getType().equals("function")){
-                    errorReporter.report(ErrorReporter.ErrorType.LeftHandSideAFunc, ctx.getStart().getLine(), ctx.getText());
-                }else{
-                    errorReporter.report(ErrorReporter.ErrorType.TypeMisMatchedForAssignment, ctx.getStart().getLine(), ctx.getText());
+            if (ctx.initVal().exp() != null) {
+                expType = getTypeOfExp(ctx.initVal().exp());
+                if (lvalType == null || expType == null){
+                    errorReporter.report(ErrorReporter.ErrorType.TypeMisMatchedForAssignment,ctx.getStart().getLine(), ctx.getText());
+                    return null;
+                }
+                if (!isValAssignLegal(lvalType, expType)) {
+                    if (lvalType.getType().equals("function")) {
+                        errorReporter.report(ErrorReporter.ErrorType.LeftHandSideAFunc, ctx.getStart().getLine(), ctx.getText());
+                    } else {
+                        errorReporter.report(ErrorReporter.ErrorType.TypeMisMatchedForAssignment, ctx.getStart().getLine(), ctx.getText());
+                    }
                 }
             }
-        }
 
+        }
 
 
         return null;
@@ -235,7 +242,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
                     return null;
                 }
             }
-        }else if (ctx.lVal() != null){
+        } else if (ctx.lVal() != null) {
             visit(ctx.lVal());
         }
         return null;
@@ -272,9 +279,9 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
             if (lvalType == null || expType == null)
                 return null;
             if (!isValAssignLegal(lvalType, expType)) {
-                if (lvalType.getType().equals("function")){
+                if (lvalType.getType().equals("function")) {
                     errorReporter.report(ErrorReporter.ErrorType.LeftHandSideAFunc, ctx.getStart().getLine(), ctx.getText());
-                }else{
+                } else {
                     errorReporter.report(ErrorReporter.ErrorType.TypeMisMatchedForAssignment, ctx.getStart().getLine(), ctx.getText());
                 }
             }
@@ -308,7 +315,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
 
     @Override
     public Void visitFuncFParam(SysYParser.FuncFParamContext ctx) {
-        if (ctx.getChildCount() > 2){ // 这个是数组
+        if (ctx.getChildCount() > 2) { // 这个是数组
             int dim = ctx.L_BRACKT().size();
             Type elementType = null;
             Type curInnerType = new IntType();
@@ -317,7 +324,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
                 curInnerType = elementType;
             }
             tmpSymbolTable.AddSymbol(ctx.IDENT().getText(), elementType, false);
-        }else{
+        } else {
             tmpSymbolTable.AddSymbol(ctx.IDENT().getText(), new IntType(), false);
         }
         return null;
@@ -333,7 +340,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
     }
 
     private void InitializeFParamsList(SysYParser.FuncFParamsContext ctx, ArrayList<Type> paramList) {
-        if (ctx == null){
+        if (ctx == null) {
             return;
         }
         int childCount = ctx.getChildCount();
@@ -379,11 +386,11 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
                 }
             }
             return new FunctionType(new IntType(),paramList);*/
-            if ((currentTable.GetSymbol(ctx.funcName().IDENT().getText())) == null){
+            if ((currentTable.GetSymbol(ctx.funcName().IDENT().getText())) == null) {
                 return null;
-            }else if (currentTable.GetSymbol(ctx.funcName().IDENT().getText()).getType() instanceof FunctionType){
-                return ((FunctionType)currentTable.GetSymbol(ctx.funcName().IDENT().getText()).getType()).getRetTy();
-            }else{ // 这里是数组
+            } else if (currentTable.GetSymbol(ctx.funcName().IDENT().getText()).getType() instanceof FunctionType) {
+                return ((FunctionType) currentTable.GetSymbol(ctx.funcName().IDENT().getText()).getType()).getRetTy();
+            } else { // 这里是数组
                 return null;
             }
         }
@@ -403,8 +410,8 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
                         return null; // 这里就是已经报错了
                     }
                 }
-            }else{
-                if (!ctx.L_BRACKT().isEmpty()){
+            } else {
+                if (!ctx.L_BRACKT().isEmpty()) {
                     return null;
                 }
             }
@@ -430,25 +437,25 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         int dim = 0;
         Type curType = arrayType;
         while (curType instanceof ArrayType) {
-            curType = ((ArrayType)curType).getElementType();
+            curType = ((ArrayType) curType).getElementType();
             dim++;
         }
         return dim;
     }
 
-    private void AddFuncParamToCurTable(SysYParser.FuncFParamsContext ctx){
+    private void AddFuncParamToCurTable(SysYParser.FuncFParamsContext ctx) {
         SysYParser.FuncFParamContext funcFParamContext = ctx.funcFParam();
     }
 
-    private Type getTypeOfCond(SysYParser.CondContext ctx){
-        if (ctx.exp() != null){
+    private Type getTypeOfCond(SysYParser.CondContext ctx) {
+        if (ctx.exp() != null) {
             return getTypeOfExp(ctx.exp());
-        }else{
+        } else {
             Type cond1Type = getTypeOfCond(ctx.cond().get(0));
             Type cond2Type = getTypeOfCond(ctx.cond().get(1));
-            if (cond1Type.getType().equals("int") && cond2Type.getType().equals("int")){
+            if (cond1Type.getType().equals("int") && cond2Type.getType().equals("int")) {
                 return new IntType();
-            }else{
+            } else {
                 return null;
             }
         }
