@@ -323,7 +323,6 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
             } else {
                 return ((FunctionType) currentTable.GetSymbol(ctx.funcName().IDENT().getText()).getType()).getRetTy();
             }
-
         }
 
     }
