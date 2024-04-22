@@ -4,15 +4,19 @@ public class ArrayType extends Type{
 
     @Override
     public String getType() {
-        return "Array";
+        return "array";
     }
 
     public ArrayType(Type elementType, int elementNum)
     {
-        if (elementType.getType() .compareTo("Int") != 0  && elementType.getType() .compareTo("Array") != 0 ){
+        if (elementType.getType() .compareTo("int") != 0  && elementType.getType() .compareTo("array") != 0 ){
             throw new RuntimeException("ArrayType: elementType must be Int or Array");
         }
         this.elementType = elementType;
         this.elementNum = elementNum;
+    }
+
+    public Type getElementType() {
+        return elementType;
     }
 }

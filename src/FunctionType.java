@@ -19,10 +19,14 @@ public class FunctionType extends Type {
 
     @Override
     public String getType() {
-        return "Function";
+        return "function";
     }
 
     public ArrayList<Type> getParamsType() {
         return paramsType;
+    }
+
+    public Type getRetTy(){
+        return retTy;
     }
 }

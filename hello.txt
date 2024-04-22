@@ -1,25 +1,5 @@
+int f(int i,int i){return 0;}
+
 int main(){
-if (a == c)
-if(b == 1)
-if(c == 1)c = 0;
-else
-return;
-else
-c =2;
-else break;if (cond)c=a+b;
-else if(cond2){return;}
-else
-c = 1;
-while(a == 0)
-while(b == 0)
-while(c == 0)
-return +0x40;
-while(a == 0)
-if(a == b )
-while(c == 0) a = c;
-if (a == b){
-    return a;
-}else{
-return b;
-}
+    f(1,1);
 }

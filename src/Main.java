@@ -50,9 +50,14 @@ public class Main
             myParserErrorListener.printParserErrorInfomation();
             return;// 直接返回
         }
-        //遍历语法树
+        //
+        /*遍历语法树
         MyParserVisitor visitor = new MyParserVisitor();
         visitor.visit(tree);
+        */
+        // 进行语义分析
+        MySemanticVisitor mySemanticVisitor = new MySemanticVisitor();
+        mySemanticVisitor.visit(tree);
 
     }
 
@@ -68,6 +73,7 @@ public class Main
         }
         System.err.println(String.format("%s %s at Line %d.",tokenName,text,t.getLine()));
     }
+
 
 
 }
