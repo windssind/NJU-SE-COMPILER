@@ -213,12 +213,12 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
             ctx.exp().forEach(this::visit);
 
             if (ctx.unaryOp() != null) {
-                if (!getTypeOfExp(ctx.exp().get(0)).getType().equals("int")) {
+                if (getTypeOfExp(ctx.exp().get(0)) != null && getTypeOfExp(ctx.exp().get(0)).getType().equals("int")) {
                     errorReporter.report(ErrorReporter.ErrorType.TypeMisMatchForOp, ctx.getStart().getLine(), ctx.getText());
                     return null;
                 }
             } else { // 需要两个exp都是int
-                if (!getTypeOfExp(ctx.exp().get(0)).getType().equals("int") || !getTypeOfExp(ctx.exp().get(1)).getType().equals("int")) {
+                if ((getTypeOfExp(ctx.exp().get(0)) != null && !getTypeOfExp(ctx.exp().get(0)).getType().equals("int")) || (getTypeOfExp(ctx.exp().get(1)) != null && !getTypeOfExp(ctx.exp().get(1)).getType().equals("int"))) {
                     errorReporter.report(ErrorReporter.ErrorType.TypeMisMatchForOp, ctx.getStart().getLine(), ctx.getText());
                     return null;
                 }
@@ -274,7 +274,8 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         }
 
         if (ctx.RETURN() != null) {
-            visit(ctx.exp());
+            if (ctx.exp() != null)
+                visit(ctx.exp());
             // 注意，本次实验中函数的返回值只有int
             if (ctx.exp() == null || (getTypeOfExp(ctx.exp()) != null && !getTypeOfExp(ctx.exp()).getType().equals("int"))) {
                 errorReporter.report(ErrorReporter.ErrorType.ReturnTypeFalse, ctx.getStart().getLine(), ctx.getText());
