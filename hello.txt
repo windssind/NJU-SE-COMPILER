@@ -9,6 +9,11 @@ int main(){
     }
 }
 
-int func(int a){
-    func(5);
+int func(int a,int b){
+    f(a);
+    f(b);
+    {
+        f(a);
+        f(b);
+    }
 }

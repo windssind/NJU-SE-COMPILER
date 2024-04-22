@@ -1,3 +1,5 @@
+import org.antlr.v4.runtime.tree.RuleNode;
+
 import java.util.*;
 
 public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
@@ -12,6 +14,8 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
 
     private Type curFuncType;
 
+    private SymbolTable tmpSymbolTable; // 用于解决传输函数参数的临时符号
+
     MySemanticVisitor() {
         bottomTable = new SymbolTable();
         currentTable = bottomTable;
@@ -19,6 +23,8 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         // 先要压存储全局变量以及函数的symbol
         symbolTableStack = new Stack<SymbolTable>();
         symbolTableStack.push(bottomTable);
+        // 用于传递函数参数
+        tmpSymbolTable = new SymbolTable();
     }
 
     public Void visitFuncDef(SysYParser.FuncDefContext ctx) {
@@ -64,6 +70,12 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         symbolTableStack.push(currentTable);
         currentTable = newTable;
         visit(ctx.L_BRACE());
+        if (ctx.getParent() instanceof SysYParser.FuncDefContext){
+            tmpSymbolTable.GetSymbols().forEach(symbol -> {
+                currentTable.AddSymbol(symbol.name, symbol.type, symbol.isGlobal);
+            });
+            tmpSymbolTable.ClearSymbols();
+        }
         ctx.blockItem().forEach(this::visit); // 依次visit block中的节点
         visit(ctx.R_BRACE());
         // 再重新更换当前符号表
@@ -279,6 +291,23 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         return null;
     }
 
+    @Override
+    public Void visitFuncFParam(SysYParser.FuncFParamContext ctx) {
+        if (ctx.getChildCount() > 2){ // 这个是数组
+            int dim = ctx.L_BRACKT().size();
+            Type elementType = null;
+            Type curInnerType = new IntType();
+            for (int i = 0; i < dim; i++) {
+                elementType = new ArrayType(curInnerType, 0);
+                curInnerType = elementType;
+            }
+            tmpSymbolTable.AddSymbol(ctx.IDENT().getText(), elementType, false);
+        }else{
+            tmpSymbolTable.AddSymbol(ctx.IDENT().getText(), new IntType(), false);
+        }
+        return null;
+    }
+
     private void InitializeFParamsList(SysYParser.FuncFParamsContext ctx, ArrayList<Type> paramList) {
         if (ctx == null){
             return;
@@ -373,4 +402,10 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         }
         return dim;
     }
+
+    private void AddFuncParamToCurTable(SysYParser.FuncFParamsContext ctx){
+        SysYParser.FuncFParamContext funcFParamContext = ctx.funcFParam();
+    }
+
+
 }

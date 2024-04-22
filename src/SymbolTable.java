@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class SymbolTable {
-    public class Symbol {
+    public  class Symbol {
         public String name;
         public Type type;
         public boolean isGlobal; // 判断一个变量是否是全局变量，如果是func就肯定为true
@@ -12,6 +12,12 @@ public class SymbolTable {
 
         public Type getType(){
             return type;
+        }
+
+        public Symbol(String name, Type type,boolean isGlobal){
+            this.name = name;
+            this.type = type;
+            this.isGlobal = isGlobal;
         }
     }
 
@@ -33,10 +39,7 @@ public class SymbolTable {
 
     public void AddSymbol(String name, Type type,boolean isGlobal)
     {
-        Symbol symbol = new Symbol();
-        symbol.name = name;
-        symbol.type = type;
-        symbol.isGlobal = isGlobal;
+        Symbol symbol = new Symbol(name, type, isGlobal);
         symbols.add(symbol);
     }
 
@@ -85,5 +88,13 @@ public class SymbolTable {
                 return;
             }
         }
+    }
+
+    public ArrayList<Symbol> GetSymbols(){
+        return symbols;
+    }
+
+    public void ClearSymbols(){
+        symbols.clear();
     }
 }
