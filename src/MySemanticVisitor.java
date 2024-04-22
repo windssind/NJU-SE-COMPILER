@@ -79,8 +79,8 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         ctx.blockItem().forEach(this::visit); // 依次visit block中的节点
         visit(ctx.R_BRACE());
         // 再重新更换当前符号表
-        symbolTableStack.pop();
         currentTable = symbolTableStack.peek();
+        symbolTableStack.pop();
         return null;
     }
 

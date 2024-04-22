@@ -1,20 +1,8 @@
 int f(int i,int i){return 0;}
 
-int main(){
+int func(int a,int b,int c[]){
     {
-    int a = 1;
-        {
-            f(a);
-        }
-    }
-}
 
-int func(int a,int b,int c[][]){
-    f(a);
-    f(b);
-    {
-        f(a);
-        f(b);
-        f(c);
     }
+    a[1];
 }
