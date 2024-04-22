@@ -1,12 +1,12 @@
 public class ErrorReporter {
     public enum ErrorType {
-        RedefinedFunc,
-        RedefinedVar,
         UndefinedVar,
         UndefinedFunc,
+        RedefinedVar,
+        RedefinedFunc,
         NotAFunction,
         FuncParamFalse,
-        ValAssignNotLegal,
+        TypeMisMatchedForAssignment,
         TypeMisMatchForOp,
         ReturnTypeFalse,
         arrayDimFalse,
@@ -17,8 +17,13 @@ public class ErrorReporter {
     }
 
     public boolean hasError = false;
+    private int curErrorLine ;
+    private int curErrorNO;
     public void report(ErrorType type, int lineNO, String name)
     {
+        if (lineNO == curErrorLine && type.ordinal() != curErrorNO){
+            return;
+        }
         switch (type)
         {
             case RedefinedFunc:
@@ -39,14 +44,11 @@ public class ErrorReporter {
             case FuncParamFalse:
                 System.err.println("Error type 8 at Line " + lineNO  + ": Function is not applicable for arguments.");
                 break;
-            case ValAssignNotLegal:
+            case TypeMisMatchedForAssignment:
                 System.err.println("Error type 5 at Line " + lineNO + ": Type mismatched for assignment.");
                 break;
             case ReturnTypeFalse:
                 System.err.println("Error type 7 at Line " + lineNO + ": Type mismatched for return.");
-                break;
-            case arrayDimFalse:
-                System.err.println("Error type 9 at Line " + lineNO + "Not an array: " + name);
                 break;
             case NotAnArray:
                 System.err.println("Error type 9 at Line " + lineNO + ": Not an array: " + name);
@@ -59,5 +61,7 @@ public class ErrorReporter {
                 break;
         }
         hasError = true;
+        curErrorLine = lineNO;
+        curErrorNO = type.ordinal();
     }
 }

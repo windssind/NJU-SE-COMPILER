@@ -1,5 +1,3 @@
-import org.antlr.v4.runtime.tree.RuleNode;
-
 import java.util.*;
 
 public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
@@ -176,7 +174,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
             int dim = getDimOfArray((ArrayType) (lvalSymbol.getType()));
             int BracketSize = ctx.L_BRACKT().size();
             if (dim < BracketSize) {
-                errorReporter.report(ErrorReporter.ErrorType.arrayDimFalse, ctx.getStart().getLine(), ctx.IDENT().getText());
+                errorReporter.report(ErrorReporter.ErrorType.TypeMisMatchForOp, ctx.getStart().getLine(), ctx.IDENT().getText());
                 return null;
             }
         }
@@ -262,7 +260,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
                 if (lvalType.getType().equals("function")){
                     errorReporter.report(ErrorReporter.ErrorType.LeftHandSideAFunc, ctx.getStart().getLine(), ctx.getText());
                 }else{
-                    errorReporter.report(ErrorReporter.ErrorType.ValAssignNotLegal, ctx.getStart().getLine(), ctx.getText());
+                    errorReporter.report(ErrorReporter.ErrorType.TypeMisMatchedForAssignment, ctx.getStart().getLine(), ctx.getText());
                 }
             }
             return null;
