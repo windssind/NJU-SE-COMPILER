@@ -9,6 +9,6 @@ int main(){
     }
 }
 
-int func(){
-    func();
+int func(int a){
+    func(5);
 }
