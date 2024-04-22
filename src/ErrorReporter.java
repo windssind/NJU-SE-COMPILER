@@ -45,10 +45,10 @@ public class ErrorReporter {
                 System.err.println("Error type 8 at Line " + lineNO  + ": Function is not applicable for arguments.");
                 break;
             case TypeMisMatchedForAssignment:
-                System.err.println("Error type 5 at Line " + lineNO + "type.Type mismatched for assignment.");
+                System.err.println("Error type 5 at Line " + lineNO + ": type.Type mismatched for assignment.");
                 break;
             case ReturnTypeFalse:
-                System.err.println("Error type 7 at Line " + lineNO + "type.Type mismatched for return.");
+                System.err.println("Error type 7 at Line " + lineNO + ": type.Type mismatched for return.");
                 break;
             case NotAnArray:
                 System.err.println("Error type 9 at Line " + lineNO + ": Not an array: " + name);
@@ -57,7 +57,7 @@ public class ErrorReporter {
                 System.err.println("Error type 11 at Line " + lineNO + ": The left-hand side of an assignment must be a variable.");
                 break;
             case TypeMisMatchForOp:
-                System.err.println("Error type 6 at Line " + lineNO + "type.Type mismatched for operands.");
+                System.err.println("Error type 6 at Line " + lineNO + ": type.Type mismatched for operands.");
                 break;
         }
         hasError = true;
