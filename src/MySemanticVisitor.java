@@ -180,7 +180,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
             if (currentTable.GetSymbol(ctx.funcName().IDENT().getText()) != null) {
                 if (currentTable.GetSymbol(ctx.funcName().IDENT().getText()).type.getType() == "function") { //简单判断一下这个结点是否是funcType，如果是就继续下一步的参数检测
                     // 这里确保了这是一个函数，然后执行接下来的参数检测
-                    int paramSize = ctx.funcRParams().param().size();
+                    int paramSize = ctx.funcRParams() != null ? ctx.funcRParams().param().size() : 0;
                     int needParamSize = ((FunctionType) currentTable.GetSymbol(ctx.funcName().IDENT().getText()).type).getParamsType().size();
                     if (paramSize != needParamSize) {
                         // 传的参数不等
