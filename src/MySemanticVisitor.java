@@ -232,8 +232,13 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
                             errorReporter.report(ErrorReporter.ErrorType.NotAFunction, ctx.funcName().getStart().getLine(), ctx.funcName().IDENT().getText());
                             return null;
                         }
-                        Type needFuncFParam = currentTable.GetSymbol(ctx.funcName().IDENT().getText()).getType();
-                        if (!needFuncFParam.getType().equals(getTypeOfExp(ctx.funcRParams().param(i).exp()))){
+                        Type needFuncFParam = ((FunctionType)currentTable.GetSymbol(ctx.funcName().IDENT().getText()).getType()).getParamsType().get(i);
+                        Type funcRParam = getTypeOfExp(ctx.funcRParams().param(i).exp());
+                        if (funcRParam == null){
+                            // 说明exp是一个有问题的东西
+                            return null;
+                        }
+                        if (!needFuncFParam.getType().equals(funcRParam.getType())){
                             errorReporter.report(ErrorReporter.ErrorType.FuncParamFalse, ctx.funcRParams().param(i).getStart().getLine(), ctx.funcName().IDENT().getText());
                             return null;
                         }

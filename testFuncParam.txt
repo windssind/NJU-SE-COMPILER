@@ -1,10 +1,10 @@
-int f(int a,int b,int a){
 
+int fun(int a,int b,int c[],int b,int d){
 }
-
-
-
-int a[1] = {};
 int main(){
-    a();
+    int a;
+    int b;
+    int c [1];
+    int d;
+    fun(a,b,c,d);
 }
