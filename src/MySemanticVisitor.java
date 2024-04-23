@@ -69,9 +69,8 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
             tmpSymbolTable.GetSymbols().forEach(symbol -> {
                 if (currentTable.HasSymbol(symbol.name)){
                     currentTable.DeleteSymbol(symbol.name);
-                    currentTable.AddSymbol(symbol.name, symbol.type, symbol.isGlobal);
                 }
-
+                currentTable.AddSymbol(symbol.name, symbol.type, symbol.isGlobal);
             });
             tmpSymbolTable.ClearSymbols();
         }
