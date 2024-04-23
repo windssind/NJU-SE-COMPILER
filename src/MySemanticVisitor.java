@@ -67,7 +67,11 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         currentTable = newTable;
         if (ctx.getParent() instanceof SysYParser.FuncDefContext) {
             tmpSymbolTable.GetSymbols().forEach(symbol -> {
-                currentTable.AddSymbol(symbol.name, symbol.type, symbol.isGlobal);
+                if (currentTable.HasSymbol(symbol.name)){
+                    currentTable.DeleteSymbol(symbol.name);
+                    currentTable.AddSymbol(symbol.name, symbol.type, symbol.isGlobal);
+                }
+
             });
             tmpSymbolTable.ClearSymbols();
         }
@@ -340,6 +344,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         return null;
     }
 
+    /*
     @Override
     public Void visitFuncFParam(SysYParser.FuncFParamContext ctx) {
         if (ctx.getChildCount() > 2) { // 这个是数组
@@ -350,12 +355,17 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
                 elementType = new ArrayType(curInnerType, 0);
                 curInnerType = elementType;
             }
-            tmpSymbolTable.AddSymbol(ctx.IDENT().getText(), elementType, false);
         } else {
-            tmpSymbolTable.AddSymbol(ctx.IDENT().getText(), new IntType(), false);
         }
         return null;
-    }
+    }*/
+
+    /*
+    @Override
+    public Void visitFuncFParams(SysYParser.FuncFParamsContext ctx) {
+        int funcParamCount = ctx.funcFParam().size();
+        for (int i)
+    }*/
 
     @Override
     public Void visitCond(SysYParser.CondContext ctx) {
@@ -384,8 +394,10 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
             // 本次实验为了降低难度，最多只有一维数组
             if (ctx.funcFParam(i).getChildCount() > 2) {
                 paramList.add(new ArrayType(new IntType(), 0)); //TODO:后面的elementNum还需要考虑
+                tmpSymbolTable.AddSymbol(ctx.funcFParam().get(i).IDENT().getText(),new ArrayType(new IntType(), 0),false);
             } else {
                 paramList.add(new IntType());
+                tmpSymbolTable.AddSymbol(ctx.funcFParam().get(i).IDENT().getText(),new IntType(),false);
             }
         }
     }
@@ -437,30 +449,6 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         } else
             return null;
 
-        /*
-        if (ctx.exp().isEmpty()){
-            // 说明只是一个普通的左值
-            return new IntType();
-        }else{
-            // 这个是数组
-            // 先要从符号表中找到，然后根据层数剥离
-            if (currentTable.GetSymbol(ctx.IDENT().getText()) != null){
-                // 成功找到
-                int dim = ctx.exp().size();
-                Type currentType = currentTable.GetSymbol(ctx.IDENT().getText()).getType();
-                for (int i = 0; i < dim; ++i){
-                    if (currentType instanceof ArrayType){
-                        currentType = ((ArrayType) currentType).getElementType();
-                    }else{
-                        return null;
-                    }
-                }
-                return currentType;
-            }else{
-                // 符号表中没找到，直接返回null
-                return null;
-            }
-        }*/
     }
 
     private boolean isValAssignLegal(Type lval, Type exp) {
