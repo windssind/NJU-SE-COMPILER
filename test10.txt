@@ -1,6 +1,6 @@
 //对变量使用函数调用：对变量使用函数调用运算符
 
-int a[];
+const int a[5] = {};
 int main(){
     int b;
     a();
