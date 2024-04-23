@@ -476,10 +476,6 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         return dim;
     }
 
-    private void AddFuncParamToCurTable(SysYParser.FuncFParamsContext ctx) {
-        SysYParser.FuncFParamContext funcFParamContext = ctx.funcFParam();
-    }
-
     private Type getTypeOfCond(SysYParser.CondContext ctx) {
         if (ctx.exp() != null) {
             return getTypeOfExp(ctx.exp());
