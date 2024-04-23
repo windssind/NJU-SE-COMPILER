@@ -197,6 +197,9 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
                 errorReporter.report(ErrorReporter.ErrorType.TypeMisMatchForOp, ctx.getStart().getLine(), ctx.IDENT().getText());
                 return null;
             }
+        }else{
+            // 这里是函数
+            errorReporter.report(ErrorReporter.ErrorType.NotAnArray, ctx.getStart().getLine(), ctx.IDENT().getText());
         }
         return null;
     }
