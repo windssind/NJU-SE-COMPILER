@@ -29,10 +29,10 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         // 要维持一个从左到右的关系
         Type retType;
         String typeStr = ctx.funcType().getChild(0).getText();
-        if (typeStr.equals("int"))
-            retType = new IntType();
-        else { //VOID类型
-            retType = new VoidType();
+        if (typeStr.equals("int")) {
+            curFuncType = retType = new IntType();
+        } else { //VOID类型
+            curFuncType = retType = new VoidType();
         }
         visit(ctx.funcType());
 
@@ -40,6 +40,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         if (currentTable.GetSymbol(funcName) != null) { // curScope为当前的作用域
             errorReporter.report(ErrorReporter.ErrorType.RedefinedFunc, ctx.getStart().getLine(), funcName);
             return null;
+            // 直接跳过，后面的block也不需要再检测了
         }
         //初始化参数列表
         ArrayList<Type> paramsTyList = new ArrayList<>();
@@ -158,8 +159,8 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
             visitInitVal(ctx.initVal());
             if (ctx.initVal().exp() != null) {
                 expType = getTypeOfExp(ctx.initVal().exp());
-                if (lvalType == null || expType == null){
-                    errorReporter.report(ErrorReporter.ErrorType.TypeMisMatchedForAssignment,ctx.getStart().getLine(), ctx.getText());
+                if (lvalType == null || expType == null) {
+                    errorReporter.report(ErrorReporter.ErrorType.TypeMisMatchedForAssignment, ctx.getStart().getLine(), ctx.getText());
                     return null;
                 }
                 if (!isValAssignLegal(lvalType, expType)) {
@@ -295,10 +296,19 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         if (ctx.RETURN() != null) {
             if (ctx.exp() != null)
                 visit(ctx.exp());
-            // 注意，本次实验中函数的返回值只有int
-            if (ctx.exp() == null || (getTypeOfExp(ctx.exp()) != null && !getTypeOfExp(ctx.exp()).getType().equals("int"))) {
-                errorReporter.report(ErrorReporter.ErrorType.ReturnTypeFalse, ctx.getStart().getLine(), ctx.getText());
+            if (ctx.exp() == null) {
+                // Return后面不带任何东西,看看函数的返回值是不是也是void
+                if (!curFuncType.getType().equals("void")) {
+                    errorReporter.report(ErrorReporter.ErrorType.ReturnTypeFalse, ctx.getStart().getLine(), ctx.getText());
+                    ;
+                }
+            } else {
+                // Return后面带了东西,如果exp不是int或者函数接受的返回值不是int就报错
+                if (!curFuncType.getType().equals("int") || ((getTypeOfExp(ctx.exp()) != null && !getTypeOfExp(ctx.exp()).getType().equals("int")))) {
+                    errorReporter.report(ErrorReporter.ErrorType.ReturnTypeFalse, ctx.getStart().getLine(), ctx.getText());
+                }
             }
+
             return null;
         }
 
@@ -479,7 +489,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         } else {
             Type cond1Type = getTypeOfCond(ctx.cond().get(0));
             Type cond2Type = getTypeOfCond(ctx.cond().get(1));
-            if (cond1Type == null || cond2Type == null){
+            if (cond1Type == null || cond2Type == null) {
                 return null;
             }
             if (cond1Type.getType().equals("int") && cond2Type.getType().equals("int")) {

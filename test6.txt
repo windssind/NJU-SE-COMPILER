@@ -1,0 +1,11 @@
+//运算符需求类型与提供类型不匹配：运算符需要的类型为int却提供array或function等
+
+int a(){
+
+}
+
+int b[5][5];
+
+int main(){
+    int c = a + b;
+}
