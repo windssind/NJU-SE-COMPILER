@@ -34,3 +34,4 @@ b();
 c(2);//wrong
 c(m[1]);//wrong
 c[1];//wrong
+}

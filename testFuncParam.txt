@@ -1,0 +1,7 @@
+int f(int a,int b,int a){
+
+}
+
+int main(){
+    f(1,2);
+}
