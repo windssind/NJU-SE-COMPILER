@@ -54,7 +54,7 @@ funcType
     ;
 
 funcFParams
-    : funcFParam (COMMA funcFParams)*
+    : funcFParam (COMMA funcFParam)*
     ;
 
 funcFParam

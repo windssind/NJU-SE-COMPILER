@@ -979,18 +979,15 @@ public class SysYParser extends Parser {
 	}
 
 	public static class FuncFParamsContext extends ParserRuleContext {
-		public FuncFParamContext funcFParam() {
-			return getRuleContext(FuncFParamContext.class,0);
+		public List<FuncFParamContext> funcFParam() {
+			return getRuleContexts(FuncFParamContext.class);
+		}
+		public FuncFParamContext funcFParam(int i) {
+			return getRuleContext(FuncFParamContext.class,i);
 		}
 		public List<TerminalNode> COMMA() { return getTokens(SysYParser.COMMA); }
 		public TerminalNode COMMA(int i) {
 			return getToken(SysYParser.COMMA, i);
-		}
-		public List<FuncFParamsContext> funcFParams() {
-			return getRuleContexts(FuncFParamsContext.class);
-		}
-		public FuncFParamsContext funcFParams(int i) {
-			return getRuleContext(FuncFParamsContext.class,i);
 		}
 		public FuncFParamsContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1014,29 +1011,27 @@ public class SysYParser extends Parser {
 	public final FuncFParamsContext funcFParams() throws RecognitionException {
 		FuncFParamsContext _localctx = new FuncFParamsContext(_ctx, getState());
 		enterRule(_localctx, 22, RULE_funcFParams);
+		int _la;
 		try {
-			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(165);
 			funcFParam();
 			setState(170);
 			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,16,_ctx);
-			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
-				if ( _alt==1 ) {
-					{
-					{
-					setState(166);
-					match(COMMA);
-					setState(167);
-					funcFParams();
-					}
-					} 
+			_la = _input.LA(1);
+			while (_la==COMMA) {
+				{
+				{
+				setState(166);
+				match(COMMA);
+				setState(167);
+				funcFParam();
+				}
 				}
 				setState(172);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,16,_ctx);
+				_la = _input.LA(1);
 			}
 			}
 		}
@@ -2274,7 +2269,7 @@ public class SysYParser extends Parser {
 		"\u00a0\7\33\2\2\u009f\u00a1\5\30\r\2\u00a0\u009f\3\2\2\2\u00a0\u00a1\3"+
 		"\2\2\2\u00a1\u00a2\3\2\2\2\u00a2\u00a3\7\34\2\2\u00a3\u00a4\5\34\17\2"+
 		"\u00a4\25\3\2\2\2\u00a5\u00a6\t\2\2\2\u00a6\27\3\2\2\2\u00a7\u00ac\5\32"+
-		"\16\2\u00a8\u00a9\7!\2\2\u00a9\u00ab\5\30\r\2\u00aa\u00a8\3\2\2\2\u00ab"+
+		"\16\2\u00a8\u00a9\7!\2\2\u00a9\u00ab\5\32\16\2\u00aa\u00a8\3\2\2\2\u00ab"+
 		"\u00ae\3\2\2\2\u00ac\u00aa\3\2\2\2\u00ac\u00ad\3\2\2\2\u00ad\31\3\2\2"+
 		"\2\u00ae\u00ac\3\2\2\2\u00af\u00b0\7\4\2\2\u00b0\u00bc\7#\2\2\u00b1\u00b2"+
 		"\7\37\2\2\u00b2\u00b9\7 \2\2\u00b3\u00b4\7\37\2\2\u00b4\u00b5\5\"\22\2"+

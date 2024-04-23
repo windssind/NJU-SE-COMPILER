@@ -353,10 +353,10 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         if (ctx == null) {
             return;
         }
-        int childCount = ctx.getChildCount();
+        int childCount = ctx.funcFParam();
         int FParamCount = 0;
         HashSet<String> paramNames = new HashSet<String>();
-        for (int i = 0; i < childCount; i++) {
+        while (ctx.funcFParam() != null){
             // 如果已经有了同名的参数，就跳过
             if (paramNames.contains(ctx.funcFParam().IDENT().getText())) {
                 continue;
