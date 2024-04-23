@@ -6,3 +6,8 @@
 int func(int arr[],int a){
     arr[5] = a;
 }
+
+int arr(){
+    int arr = 5;
+    int b = arr;
+}
