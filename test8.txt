@@ -3,8 +3,6 @@
       //为了降低实验难度，我们保证测试用例中的函数参数不会为多维（二维及以上）数组。
 
 
-int func(int i, int a){
-    int b;
-    int c;
-    func(b,c);
+int func(int arr[],int a){
+    arr[5] = a;
 }
