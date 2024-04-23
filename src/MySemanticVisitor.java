@@ -363,6 +363,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         for (int i = 0; i < childCount; ++i) {
             // 如果已经有了同名的参数，就跳过
             if (paramNames.contains(ctx.funcFParam().get(i).IDENT().getText())) {
+                errorReporter.report(ErrorReporter.ErrorType.RedefinedVar, ctx.getStart().getLine(), ctx.funcFParam().get(i).IDENT().getText());
                 continue;
             } else {
                 paramNames.add(ctx.funcFParam().get(i).IDENT().getText());
