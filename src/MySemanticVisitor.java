@@ -225,16 +225,16 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
                     for (int i = 0; i < paramSize; i++) {
                         visit(ctx.funcRParams().param(i));
                         if (currentTable.GetSymbol(ctx.funcName().IDENT().getText() )== null){
-                            errorReporter.report(ErrorReporter.ErrorType.UndefinedFunc, ctx.getStart().getLine(), ctx.funcName().IDENT().getText());
+                            errorReporter.report(ErrorReporter.ErrorType.UndefinedFunc, ctx.funcName().getStart().getLine(), ctx.funcName().IDENT().getText());
                             return null;
                         }
                         if (!currentTable.GetSymbol(ctx.funcName().IDENT().getText()).getType().getType().equals("function") ){
-                            errorReporter.report(ErrorReporter.ErrorType.NotAFunction, ctx.getStart().getLine(), ctx.funcName().IDENT().getText());
+                            errorReporter.report(ErrorReporter.ErrorType.NotAFunction, ctx.funcName().getStart().getLine(), ctx.funcName().IDENT().getText());
                             return null;
                         }
                         Type needFuncFParam = currentTable.GetSymbol(ctx.funcName().IDENT().getText()).getType();
                         if (!needFuncFParam.getType().equals(getTypeOfExp(ctx.funcRParams().param(i).exp()))){
-                            errorReporter.report(ErrorReporter.ErrorType.FuncParamFalse, ctx.getStart().getLine(), ctx.funcName().IDENT().getText());
+                            errorReporter.report(ErrorReporter.ErrorType.FuncParamFalse, ctx.funcRParams().param(i).getStart().getLine(), ctx.funcName().IDENT().getText());
                             return null;
                         }
                     }
