@@ -482,6 +482,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
 
     private Type getTypeOfCond(SysYParser.CondContext ctx) {
         if (ctx.exp() != null) {
+            visit(ctx.exp());
             return getTypeOfExp(ctx.exp());
         } else {
             Type cond1Type = getTypeOfCond(ctx.cond().get(0));
