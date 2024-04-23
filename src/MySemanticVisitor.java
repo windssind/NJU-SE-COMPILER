@@ -199,7 +199,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
             }
         }else{
             // 这里是函数
-            errorReporter.report(ErrorReporter.ErrorType.LeftHandSideAFunc, ctx.getStart().getLine(), ctx.IDENT().getText());
+            //errorReporter.report(ErrorReporter.ErrorType.LeftHandSideAFunc, ctx.getStart().getLine(), ctx.IDENT().getText());
         }
         return null;
     }
