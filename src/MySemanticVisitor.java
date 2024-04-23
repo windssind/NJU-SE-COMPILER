@@ -353,24 +353,21 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         if (ctx == null) {
             return;
         }
-        int childCount = ctx.funcFParam();
+        int childCount = ctx.funcFParam().size();
         int FParamCount = 0;
         HashSet<String> paramNames = new HashSet<String>();
-        while (ctx.funcFParam() != null){
+        for (int i = 0; i < childCount; ++i) {
             // 如果已经有了同名的参数，就跳过
-            if (paramNames.contains(ctx.funcFParam().IDENT().getText())) {
+            if (paramNames.contains(ctx.funcFParam().get(i).IDENT().getText())) {
                 continue;
             } else {
-                paramNames.add(ctx.funcFParam().IDENT().getText());
+                paramNames.add(ctx.funcFParam().get(i).IDENT().getText());
             }
-            if (ctx.getChild(i) instanceof SysYParser.FuncFParamContext) {
-                SysYParser.FuncFParamContext funcFParamContext = (SysYParser.FuncFParamContext) ctx.getChild(i);
-                // 本次实验为了降低难度，最多只有一维数组
-                if (funcFParamContext.getChildCount() > 2) {
-                    paramList.add(new ArrayType(new IntType(), 0)); //TODO:后面的elementNum还需要考虑
-                } else {
-                    paramList.add(new IntType());
-                }
+            // 本次实验为了降低难度，最多只有一维数组
+            if (ctx.funcFParam(i).getChildCount() > 2) {
+                paramList.add(new ArrayType(new IntType(), 0)); //TODO:后面的elementNum还需要考虑
+            } else {
+                paramList.add(new IntType());
             }
         }
     }
