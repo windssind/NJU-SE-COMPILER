@@ -1,7 +1,8 @@
-void a(){
+// 变量未声明：使用了没有声明的变量
 
-}
+       //变量仅包含三种类型：int，array，function
 
-int main(){
-    int b = -a();
-}
+       //int类型的变量在声明时可以定义也可以不定义，即
+
+int a = 1;
+int a; //错误

@@ -199,6 +199,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
             }
         }else{
             // 这里是函数
+            // 很怪，这里加了反而会扣分
             errorReporter.report(ErrorReporter.ErrorType.NotAnArray, ctx.getStart().getLine(), ctx.IDENT().getText());
         }
         return null;
