@@ -402,14 +402,6 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         } else if (ctx.number() != null) {
             return new IntType();
         } else { // 这里是函数调用
-            /*ArrayList<Type> paramList = new ArrayList<Type>();
-            if (ctx.funcRParams() != null) {
-                int paramNum = ctx.funcRParams().getChildCount();
-                for (int i = 0; i < paramNum; i++) {
-                    paramList.add(getTypeOfExp(ctx.funcRParams().param().get(i).exp()));
-                }
-            }
-            return new FunctionType(new IntType(),paramList);*/
             if ((currentTable.GetSymbol(ctx.funcName().IDENT().getText())) == null) {
                 return null;
             } else if (currentTable.GetSymbol(ctx.funcName().IDENT().getText()).getType() instanceof FunctionType) {

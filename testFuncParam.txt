@@ -2,6 +2,9 @@ int f(int a,int b,int a){
 
 }
 
+
+
+int a[1] = {};
 int main(){
-    f(1,2);
+    a();
 }
