@@ -48,7 +48,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
 
         if (ctx.funcFParams() != null) {
             InitializeFParamsList(ctx.funcFParams(), paramsTyList);
-            visit(ctx.funcFParams());
+            //visit(ctx.funcFParams());
         }
 
         // 给符号表添加一个函数信息

@@ -1,7 +1,7 @@
 //函数参数不适用：函数参数的数量或类型与函数声明的参数数量或类型不一致
 
       //为了降低实验难度，我们保证测试用例中的函数参数不会为多维（二维及以上）数组。
-
+const int func3[5]= {1,2,3,4,5};
 
 int func1(int arr[],int a){
 
@@ -11,9 +11,31 @@ int func2(){
 
 }
 
+void func4(int i,int i[]){
+
+}
+
+void func5(int a,int b,int c,int d,int e){
+
+}
+
+const int b = 4;
+void func6(int a,int c){
+
+}
+
+int func7(int a[],int b,int c,int d){
+    func7(a,b,c,d);
+    func6(func7(a,b,c,d),c);
+}
+
 int arr(){
     int arr[5];
     func1(arr,5);
     func2();
-
+    func2(1);
+    func2(func1(arr),5,465465);
+    func3(func(1),func2());
+    func4(1);
+    func5(1,2);
 }
