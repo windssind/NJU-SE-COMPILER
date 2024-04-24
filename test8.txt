@@ -3,11 +3,17 @@
       //为了降低实验难度，我们保证测试用例中的函数参数不会为多维（二维及以上）数组。
 
 
-int func(int arr[],int a){
-    arr[5] = a;
+int func1(int arr[],int a){
+
+}
+
+int func2(){
+
 }
 
 int arr(){
-    int arr = 5;
-    int b = arr;
+    int arr[5];
+    func1(arr,5);
+    func2();
+
 }

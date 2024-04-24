@@ -222,12 +222,14 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
                 if (currentTable.GetSymbol(ctx.funcName().IDENT().getText()).type.getType().equals("function")) { //简单判断一下这个结点是否是funcType，如果是就继续下一步的参数检测
                     // 这里确保了这是一个函数，然后执行接下来的参数检测
                     int paramSize = ctx.funcRParams() != null ? ctx.funcRParams().param().size() : 0;
-                    int needParamSize = ((FunctionType) currentTable.GetSymbol(ctx.funcName().IDENT().getText()).type).getParamsType().size();
+                    int needParamSize = ((FunctionType) (currentTable.GetSymbol(ctx.funcName().IDENT().getText()).type)).getParamsType().size();
                     if (paramSize != needParamSize) {
                         // 传的参数不等
                         errorReporter.report(ErrorReporter.ErrorType.FuncParamFalse, ctx.getStart().getLine(), ctx.funcName().IDENT().getText());
                         return null;
                     }
+
+
                     // 传的参数个数相同，看一下参数类型能否匹配
                     for (int i = 0; i < paramSize; i++) {
                         visit(ctx.funcRParams().param(i));
@@ -239,7 +241,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
                             errorReporter.report(ErrorReporter.ErrorType.NotAFunction, ctx.funcName().getStart().getLine(), ctx.funcName().IDENT().getText());
                             return null;
                         }
-                        Type needFuncFParam = ((FunctionType)currentTable.GetSymbol(ctx.funcName().IDENT().getText()).getType()).getParamsType().get(i);
+                        Type needFuncFParam = ((FunctionType)(currentTable.GetSymbol(ctx.funcName().IDENT().getText()).getType())).getParamsType().get(i);
                         Type funcRParam = getTypeOfExp(ctx.funcRParams().param(i).exp());
                         if (funcRParam == null){
                             // 说明exp是一个有问题的东西
