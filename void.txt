@@ -5,3 +5,5 @@ void a(){
 int main(){
     int b = -a();
 }
+
+const int c = (1);
