@@ -6,3 +6,8 @@ int main(){
     a[5];
     b = main[4]; // 这个应该报错什么？
 }
+
+int func(){
+    int func[1];
+    func[3][2];
+}
