@@ -264,7 +264,8 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
                     return null;
                 }
             } else { // 需要两个exp都是int
-                if (ctx.exp().size() == 2 && (getTypeOfExp(ctx.exp().get(0)) != null && !getTypeOfExp(ctx.exp().get(0)).getType().equals("int")) || (getTypeOfExp(ctx.exp().get(1)) != null && !getTypeOfExp(ctx.exp().get(1)).getType().equals("int"))) {
+                int size = ctx.exp().size();
+                if (ctx.exp().size() == 2 && ((getTypeOfExp(ctx.exp().get(0)) != null && !getTypeOfExp(ctx.exp().get(0)).getType().equals("int")) || (getTypeOfExp(ctx.exp().get(1)) != null && !getTypeOfExp(ctx.exp().get(1)).getType().equals("int")))) {
                     errorReporter.report(ErrorReporter.ErrorType.TypeMisMatchForOp, ctx.getStart().getLine(), ctx.getText());
                     return null;
                 }else{ // 一个exp的错误
