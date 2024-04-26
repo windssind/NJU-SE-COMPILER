@@ -259,7 +259,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
             ctx.exp().forEach(this::visit);
 
             if (ctx.unaryOp() != null) {
-                if (getTypeOfExp(ctx.exp().get(0)) != null && getTypeOfExp(ctx.exp().get(0)).getType().equals("int")) {
+                if (getTypeOfExp(ctx.exp().get(0)) != null && !getTypeOfExp(ctx.exp().get(0)).getType().equals("int")) {
                     errorReporter.report(ErrorReporter.ErrorType.TypeMisMatchForOp, ctx.getStart().getLine(), ctx.getText());
                     return null;
                 }
@@ -354,29 +354,6 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
             ctx.stmt().forEach(this::visit);
         return null;
     }
-
-    /*
-    @Override
-    public Void visitFuncFParam(SysYParser.FuncFParamContext ctx) {
-        if (ctx.getChildCount() > 2) { // 这个是数组
-            int dim = ctx.L_BRACKT().size();
-            Type elementType = null;
-            Type curInnerType = new IntType();
-            for (int i = 0; i < dim; i++) {
-                elementType = new ArrayType(curInnerType, 0);
-                curInnerType = elementType;
-            }
-        } else {
-        }
-        return null;
-    }*/
-
-    /*
-    @Override
-    public Void visitFuncFParams(SysYParser.FuncFParamsContext ctx) {
-        int funcParamCount = ctx.funcFParam().size();
-        for (int i)
-    }*/
 
     @Override
     public Void visitCond(SysYParser.CondContext ctx) {
