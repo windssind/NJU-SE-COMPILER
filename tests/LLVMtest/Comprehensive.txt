@@ -1,9 +1,15 @@
 int a = 0;
 int b;
+const int e = 1;
 int main(){
     b = 5;
     int c = a + b;
     int d;
     d = c + b;
-    return d;
+
+    const int f = 4;
+    const int g = e +f ;
+    const int h = b + g;
+    int i = f + g;
+    return i;
 }
