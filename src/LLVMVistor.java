@@ -106,7 +106,7 @@ public class LLVMVistor extends SysYParserBaseVisitor<LLVMValueRef>{
     public LLVMValueRef visitStmt(SysYParser.StmtContext ctx) {
         if (ctx.ASSIGN() != null){
             return LLVMBuildStore(builder, visit(ctx.exp()), symbolTable.get(ctx.lVal().IDENT().getText()));
-        }else if (ctx.returnStmt() != null){
+        }else if (ctx.() != null){
             return visit(ctx.returnStmt());
         }
         return null;

@@ -78,7 +78,7 @@ stmt
     | WHILE L_PAREN cond R_PAREN stmt
     | BREAK SEMICOLON
     | CONTINUE SEMICOLON
-    | returnStmt
+    | RETURN (exp)? SEMICOLON
     ;
 
 exp
@@ -86,7 +86,7 @@ exp
    | lVal
    | number
    | funcName L_PAREN funcRParams? R_PAREN
-   | unaryExp
+   | unaryOp exp
    | exp op=(MUL | DIV | MOD) exp
    | exp op=(PLUS | MINUS) exp
    ;
@@ -128,15 +128,5 @@ constExp
 funcName
     : IDENT
     ;
-returnStmt
-    : RETURN (exp)? SEMICOLON
-    ;
 
-unaryExp
-    : unaryOp exp
-    ;
 
-binaryExp
-    : exp op=(MUL | DIV | MOD) exp
-    | exp op=(PLUS | MINUS) exp
-    ;
