@@ -159,4 +159,16 @@ public interface SysYParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitFuncName(SysYParser.FuncNameContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SysYParser#returnStmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReturnStmt(SysYParser.ReturnStmtContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SysYParser#unaryExp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnaryExp(SysYParser.UnaryExpContext ctx);
 }

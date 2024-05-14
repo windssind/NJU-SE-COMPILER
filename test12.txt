@@ -1,3 +1,9 @@
-int a(){
-    +a();
+
+
+void func(){
+
 }
+int a(){
+     int array[3] = {1,2,3};
+     int b = +c();
+ }
