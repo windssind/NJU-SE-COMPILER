@@ -11,5 +11,5 @@ int main(){
     const int g = e +f ;
     const int h = b + g;
     int i = f + g;
-    return i;
+    return !(a+ b - c + e - !e + !f);
 }

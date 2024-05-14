@@ -15,7 +15,7 @@ import static org.bytedeco.llvm.global.LLVM.LLVMPrintModuleToFile;
 public class Main
 {
     private  static SysYLexer sysYLexer ;
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         if (args.length < 2) {
             System.err.println("input path is required");
         }
@@ -38,6 +38,7 @@ public class Main
 
         // 获取编译的树
         ParseTree  tree = sysYParser.program();
+        throw new Exception(tree.getText());
 
         // 进行中间代码输出
         LLVMVistor llvmVistor = new LLVMVistor();
