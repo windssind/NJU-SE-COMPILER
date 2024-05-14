@@ -57,9 +57,9 @@ public class LLVMVistor extends SysYParserBaseVisitor<LLVMValueRef>{
     public LLVMValueRef visitExp(SysYParser.ExpContext ctx) {
         if (ctx.number() != null){
             if (ctx.number().INTEGER_CONST().getText().contains("0x")||ctx.number().INTEGER_CONST().getText().contains("0X")){
-                return LLVMConstInt(i32Type, Integer.parseInt(ctx.number().INTEGER_CONST().getText(), 16), 0);
+                return LLVMConstInt(i32Type, Integer.parseInt(ctx.number().INTEGER_CONST().getText().substring(2), 16), 0);
             }else if (ctx.number().getText().contains("0b")||ctx.number().INTEGER_CONST().getText().contains("0B")){
-                return LLVMConstInt(i32Type, Integer.parseInt(ctx.number().INTEGER_CONST().getText(), 8), 0);
+                return LLVMConstInt(i32Type, Integer.parseInt(ctx.number().INTEGER_CONST().getText().substring(2), 8), 0);
             }else {
                 return LLVMConstInt(i32Type, Integer.parseInt(ctx.number().INTEGER_CONST().getText()), 0);
             }

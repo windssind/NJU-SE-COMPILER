@@ -1,0 +1,6 @@
+int main(){
+    int a = 0x5;
+    int b=0X7;
+    int c = a+b;
+    return c;
+    }
