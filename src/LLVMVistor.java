@@ -57,8 +57,18 @@ public class LLVMVistor extends SysYParserBaseVisitor<LLVMValueRef>{
     public LLVMValueRef visitExp(SysYParser.ExpContext ctx) {
         if (ctx.number() != null){
             return LLVMConstInt(i32Type, Integer.parseInt(ctx.number().getText()), 0);
-        }else if (ctx.unaryExp() != null){
-            return visit(ctx.unaryExp());
+        }else if (ctx.unaryOp() != null){
+            if (ctx.unaryOp().PLUS() != null){
+                return visit(ctx.exp(0));
+            }else if (ctx.unaryOp().MINUS() != null){
+                LLVMValueRef operand = visit(ctx.exp(0));
+                return LLVMBuildSub(builder, LLVMConstInt(i32Type, 0, 0), operand, "minus");
+            }else {
+                LLVMValueRef operand = visit(ctx.exp(0));
+                LLVMValueRef _tmp = LLVMBuildICmp(builder, LLVMIntNE, LLVMConstInt(i32Type, 0, 0), operand, "tmp_");
+                _tmp = LLVMBuildXor(builder, _tmp, LLVMConstInt(LLVMInt1Type(), 1, 0), "tmp_");
+                return _tmp = LLVMBuildZExt(builder, _tmp, i32Type, "tmp_");
+            }
         }else if (ctx.exp() != null && ctx.exp().size() == 2){
             LLVMValueRef lhs = visit(ctx.exp(0));
             LLVMValueRef rhs = visit(ctx.exp(1));
@@ -82,6 +92,7 @@ public class LLVMVistor extends SysYParserBaseVisitor<LLVMValueRef>{
         return null;
     }
 
+    /*
     @Override
     public LLVMValueRef visitUnaryExp(SysYParser.UnaryExpContext ctx) {
         if (ctx.unaryOp().PLUS() != null){
@@ -95,19 +106,20 @@ public class LLVMVistor extends SysYParserBaseVisitor<LLVMValueRef>{
             _tmp = LLVMBuildXor(builder, _tmp, LLVMConstInt(LLVMInt1Type(), 1, 0), "tmp_");
             return _tmp = LLVMBuildZExt(builder, _tmp, i32Type, "tmp_");
         }
-    }
+    }*/
 
+    /*
     @Override
     public LLVMValueRef visitReturnStmt(SysYParser.ReturnStmtContext ctx) {
         return LLVMBuildRet(builder, visit(ctx.exp()));
     }
-
+    */
     @Override
     public LLVMValueRef visitStmt(SysYParser.StmtContext ctx) {
         if (ctx.ASSIGN() != null){
             return LLVMBuildStore(builder, visit(ctx.exp()), symbolTable.get(ctx.lVal().IDENT().getText()));
-        }else if (ctx.() != null){
-            return visit(ctx.returnStmt());
+        }else if (ctx.RETURN() != null){
+            return LLVMBuildRet(builder, visit(ctx.exp()));
         }
         return null;
     }
