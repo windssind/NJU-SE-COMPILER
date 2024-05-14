@@ -88,7 +88,7 @@ exp
    | funcName L_PAREN funcRParams? R_PAREN
    | unaryExp
    | exp op=(MUL | DIV | MOD) exp
-   | exp op=(PLUS | MINUS) exp
+   | exp op=(PLUS | MINUS)
    ;
 
 cond
@@ -134,4 +134,9 @@ returnStmt
 
 unaryExp
     : unaryOp exp
+    ;
+
+binaryExp
+    : exp op=(MUL | DIV | MOD) exp
+    | exp op=(PLUS | MINUS) exp
     ;

@@ -210,8 +210,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
             //errorReporter.report(ErrorReporter.ErrorType.NotAnArray, ctx.getStart().getLine(), ctx.IDENT().getText());
         }
         return null;
-    }
-
+    }/*
     @Override
     public Void visitExp(SysYParser.ExpContext ctx) {
         // 1.函数的调用是否合法
@@ -257,7 +256,6 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         } else if (!ctx.exp().isEmpty()) {// 2. 判断exp两侧的类型是否相同
             // 这里有问题
             ctx.exp().forEach(this::visit);
-
             if (ctx.unaryOp() != null) {
                 if (getTypeOfExp(ctx.exp().get(0)) != null && !getTypeOfExp(ctx.exp().get(0)).getType().equals("int")) {
                     errorReporter.report(ErrorReporter.ErrorType.TypeMisMatchForOp, ctx.getStart().getLine(), ctx.getText());
@@ -280,6 +278,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         }
         return null;
     }
+    */
 
     /*
     这个是特定用于函数调用时候的funcName，声明时不会使用
@@ -299,6 +298,7 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
         return null;
     }
 
+    /*
     @Override
     public Void visitStmt(SysYParser.StmtContext ctx) {
         if (ctx.lVal() != null) {
@@ -354,6 +354,8 @@ public class MySemanticVisitor extends SysYParserBaseVisitor<Void> {
             ctx.stmt().forEach(this::visit);
         return null;
     }
+
+         */
 
     @Override
     public Void visitCond(SysYParser.CondContext ctx) {
