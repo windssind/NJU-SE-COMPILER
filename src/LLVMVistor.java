@@ -99,15 +99,17 @@ public class LLVMVistor extends SysYParserBaseVisitor<LLVMValueRef>{
 
     @Override
     public LLVMValueRef visitReturnStmt(SysYParser.ReturnStmtContext ctx) {
-        return LLVMBuildRet(builder, visitExp(ctx.exp()));
+        return LLVMBuildRet(builder, visit(ctx.exp()));
     }
 
     @Override
     public LLVMValueRef visitStmt(SysYParser.StmtContext ctx) {
         if (ctx.ASSIGN() != null){
-            return LLVMBuildStore(builder, visitExp(ctx.exp()), symbolTable.get(ctx.lVal().IDENT().getText()));
+            return LLVMBuildStore(builder, visit(ctx.exp()), symbolTable.get(ctx.lVal().IDENT().getText()));
+        }else if (ctx.returnStmt() != null){
+            return visit(ctx.returnStmt());
         }
-        return super.visitStmt(ctx);
+        return null;
     }
 
     @Override
