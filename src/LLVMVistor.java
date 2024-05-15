@@ -58,8 +58,8 @@ public class LLVMVistor extends SysYParserBaseVisitor<LLVMValueRef>{
         if (ctx.number() != null){
             if (ctx.number().INTEGER_CONST().getText().contains("0x")||ctx.number().INTEGER_CONST().getText().contains("0X")){
                 return LLVMConstInt(i32Type, Integer.parseInt(ctx.number().INTEGER_CONST().getText().substring(2), 16), 0);
-            }else if (ctx.number().getText().contains("0b")||ctx.number().INTEGER_CONST().getText().contains("0B")){
-                return LLVMConstInt(i32Type, Integer.parseInt(ctx.number().INTEGER_CONST().getText().substring(2), 8), 0);
+            }else if (ctx.number().INTEGER_CONST().getText().startsWith("0")){
+                return LLVMConstInt(i32Type, Integer.parseInt(ctx.number().INTEGER_CONST().getText().substring(1), 8), 0);
             }else {
                 return LLVMConstInt(i32Type, Integer.parseInt(ctx.number().INTEGER_CONST().getText()), 0);
             }
@@ -91,7 +91,7 @@ public class LLVMVistor extends SysYParserBaseVisitor<LLVMValueRef>{
                     return LLVMBuildSRem(builder, lhs, rhs, "rem");
                 }
         }else if (ctx.exp() != null && ctx.exp().size() == 1){
-            return visitExp(ctx.exp(0));
+            return visit(ctx.exp(0));
         }else if (ctx.lVal() != null){
             return LLVMBuildLoad(builder, symbolTable.get(ctx.lVal().IDENT().getText()), ctx.lVal().IDENT().getText());
         }

@@ -46,7 +46,7 @@ public class Main
         LLVMVistor llvmVistor = new LLVMVistor();
         llvmVistor.Init();
         llvmVistor.visit(tree);
-        //LLVMDumpModule(llvmVistor.module);
+        LLVMDumpModule(llvmVistor.module);
         BytePointer error = new BytePointer();
         LLVMPrintModuleToFile(llvmVistor.module,filePath,error);
 
