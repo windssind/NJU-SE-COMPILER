@@ -1,6 +1,8 @@
 ; ModuleID = 'module'
 source_filename = "module"
 
+@a = global i32 1
+
 define i32 @main() {
 mainEntry:
   %a = alloca i32, align 4

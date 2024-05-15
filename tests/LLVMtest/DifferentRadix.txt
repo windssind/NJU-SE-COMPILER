@@ -1,6 +1,6 @@
 int main(){
-    int a = 0x5;
-    int b=0X7;
+    int a = 0x15;
+    int b=0X17;
     int c = a+b;
     return c;
     }
